@@ -15,4 +15,4 @@
 
 ## 截图
 
-![屏幕截图](screenshot.png)
+<img src="screenshot.png" width="640px">
