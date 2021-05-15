@@ -8,4 +8,4 @@
 - [The Embedded Rust Book](https://docs.rust-embedded.org/book/index.html)
 - [Writing an OS in Rust, Philipp Oppermann's blog](https://os.phil-opp.com/)
 
-[[geekbang-411.jpg|width=450px]]
+<img src="geekbang-411.jpg" width="450px">
