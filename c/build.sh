@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
 export current_dir=$(cd "$(dirname "$0")";pwd)
 cd "${current_dir}"
+
 export src_dir="${current_dir}/src"
 export target_dir="${current_dir}/target"
 
