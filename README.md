@@ -4,6 +4,8 @@
 
 ## 参考资料
 
-### [GRUB 2](https://wiki.osdev.org/GRUB_2)
+- [OSDEV.org](https://wiki.osdev.org/Tutorials)
+- [The Embedded Rust Book](https://docs.rust-embedded.org/book/index.html)
+- [Writing an OS in Rust, Philipp Oppermann's blog](https://os.phil-opp.com/)
 
-- `grub-mkrescue -o target.iso dir` 构建 GRUB 启动 iso 镜像；
+![操作系统实战45讲](geekbang-411.jpg)
