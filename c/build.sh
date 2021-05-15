@@ -20,4 +20,4 @@ objdump -h "${target_dir}/kernel.elf"
 mkdir -p "${target_dir}/isofiles/boot/grub"
 cp grub.cfg "${target_dir}/isofiles/boot/grub/grub.cfg"
 cp "${target_dir}/kernel.bin" "${target_dir}/isofiles/boot/kernel.bin"
-grub-mkrescue -o "${target_dir}/LeiOS.iso" "${target_dir}/isofiles" --verbose -d /usr/lib/grub/i386-pc
+grub-mkrescue -o "${target_dir}/LeiOS.iso" "${target_dir}/isofiles"
