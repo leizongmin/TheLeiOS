@@ -10,7 +10,7 @@
 开发过程：
 
 - 首次开发时，需要执行命令 `./build-docker-image.sh` 构建 Docker 镜像；
-- 执行命令 `./build-on-docker.sh` 构建，最终会输出 `tar/LeiOS.iso` 的 CDROOM 镜像文件；
+- 执行命令 `./build-on-docker.sh` 构建，最终会输出 `target/LeiOS.iso` 的 CDROOM 镜像文件；
 - 执行命令 `./run-on-qemu.sh` 用于启动操作系统；
 
 ## 截图
