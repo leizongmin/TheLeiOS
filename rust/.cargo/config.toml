@@ -1,7 +1,7 @@
 # 参考文档：https://doc.rust-lang.org/cargo/reference/config.html
 
 [build]
-target = "leios.json"
+target = "leios_x86_64.json"
 
 [unstable]
 build-std = ["core", "compiler_builtins"]
