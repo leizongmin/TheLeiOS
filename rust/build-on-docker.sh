@@ -19,4 +19,4 @@ else
     $docker_run ./build2.sh
 fi
 
-cp "${target_dir}/LeiOS.iso" "${current_dir}/LeiOS.iso"
+cp "${target_dir}/LeiOS.iso" "${current_dir}/target/LeiOS.iso"

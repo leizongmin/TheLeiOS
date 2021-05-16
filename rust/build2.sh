@@ -7,6 +7,7 @@ cd "${current_dir}"
 export target_dir="${current_dir}/target"
 
 cargo build --release
+objdump -h "${target_dir}/leios_x86_64/release/leios"
 
 mkdir -p "${target_dir}/isofiles/boot/grub"
 cp grub.cfg "${target_dir}/isofiles/boot/grub/grub.cfg"
