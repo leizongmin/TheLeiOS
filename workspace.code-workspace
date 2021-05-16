@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "root"
+		},
+		{
+			"path": "c",
+			"name": "c-version"
+		},
+		{
+			"path": "rust",
+			"name": "rust-version"
+		}
+	],
+	"settings": {}
+}
