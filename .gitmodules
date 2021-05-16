@@ -1,0 +1,18 @@
+[submodule "ref/rust-osdev/bootloader"]
+	path = ref/rust-osdev/bootloader
+	url = https://github.com/rust-osdev/bootloader.git
+[submodule "ref/rust-osdev/bootimage"]
+	path = ref/rust-osdev/bootimage
+	url = https://github.com/rust-osdev/bootimage.git
+[submodule "ref/rust-osdev/x86_64"]
+	path = ref/rust-osdev/x86_64
+	url = https://github.com/rust-osdev/x86_64.git
+[submodule "ref/rust-osdev/ps2-mouse"]
+	path = ref/rust-osdev/ps2-mouse
+	url = https://github.com/rust-osdev/ps2-mouse.git
+[submodule "ref/rust-osdev/multiboot2-elf64"]
+	path = ref/rust-osdev/multiboot2-elf64
+	url = https://github.com/rust-osdev/multiboot2-elf64.git
+[submodule "ref/rust-osdev/vga"]
+	path = ref/rust-osdev/vga
+	url = https://github.com/rust-osdev/vga.git
