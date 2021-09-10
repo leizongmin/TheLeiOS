@@ -5,16 +5,16 @@
 			"name": "root"
 		},
 		{
+			"path": "ref/rust-osdev",
+			"name": "ref-rust-osdev"
+		},
+		{
 			"path": "c",
 			"name": "the-c-version"
 		},
 		{
 			"path": "rust",
 			"name": "the-rust-version"
-		},
-		{
-			"path": "ref/rust-osdev",
-			"name": "ref-rust-osdev"
 		}
 	],
 	"settings": {
