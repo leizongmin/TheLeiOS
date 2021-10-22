@@ -1,4 +1,4 @@
-FROM rust:1.52
+FROM rust:1.56
 
 RUN apt-get update -y && apt install grub2 xorriso -y
 RUN rustup default nightly
