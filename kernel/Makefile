@@ -1,24 +1,24 @@
-MAKEFLAGS 		?= -sR
-MKDIR 			?= mkdir
-RMDIR 			?= rmdir
-CP 				?= cp
-CD 				?= cd
-DD 				?= dd
-RM 				?= rm
+MAKEFLAGS 	?= -sR
+MKDIR 		?= mkdir
+RMDIR 		?= rmdir
+CP 		?= cp
+CD 		?= cd
+DD 		?= dd
+RM 		?= rm
 
-ASM				?= nasm
-CC				?= gcc
-LD				?= ld
-OBJCOPY			?= objcopy
+ASM		?= nasm
+CC		?= gcc
+LD		?= ld
+OBJCOPY		?= objcopy
 
-ASMBFLAGS 		?= -f elf -w-orphan-labels
-CFLAGS 			?= -g -c -Os -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
-LDFLAGS 		?= -s -static -T kernel.lds -n -Map kernel.map
-OJCYFLAGS 		?= -S -O binary
+ASMBFLAGS 	?= -f elf -w-orphan-labels
+CFLAGS 		?= -g -c -Os -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
+LDFLAGS 	?= -s -static -T kernel.lds -n -Map kernel.map
+OJCYFLAGS 	?= -S -O binary
 
 KERNEL_OBJS 	:= boot.o main.o vgastr.o
-KERNEL_ELF 		?= kernel.elf
-KERNEL_BIN 		?= kernel.bin
+KERNEL_ELF 	?= kernel.elf
+KERNEL_BIN 	?= kernel.bin
 
 .PHONY: build clean all link bin variables
 

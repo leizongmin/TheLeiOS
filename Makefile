@@ -1,12 +1,12 @@
-UNAME_S 				?= $(shell uname -s)
-KERNEL_DIR 				?= $(CURDIR)/kernel
-TARGET_DIR 				?= $(CURDIR)/target
-DOCKER_IMAGE 			?= leios-build
-ISO_FILE 				?= $(TARGET_DIR)/LeiOS.iso
+UNAME_S 		?= $(shell uname -s)
+KERNEL_DIR 		?= $(CURDIR)/kernel
+TARGET_DIR 		?= $(CURDIR)/target
+DOCKER_IMAGE 		?= leios-build
+ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 
-GDB 					?= gdb
-DOCKER 					?= docker
-QEMU 					?= qemu-system-x86_64
+GDB 			?= gdb
+DOCKER 			?= docker
+QEMU 			?= qemu-system-x86_64
 override QEMU_FLAGS 	+= -m 16 -no-reboot -s
 
 BUILD_TARGET_DARWIN 	:= docker
