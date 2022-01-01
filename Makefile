@@ -8,6 +8,7 @@ DOCKER_IMAGE 		?= leios-build
 ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 KERNEL_BIN_FILE 	?= $(TARGET_DIR)/isofiles/boot/kernel.bin
 KERNEL_ELF_FILE 	?= $(TARGET_DIR)/kernel.elf
+CONTAINER_NAME 		?= Build-LeiOS-$(shell date +%Y%m%d-%H%M%S)
 
 GDB 			?= gdb
 DOCKER 			?= docker
@@ -79,6 +80,7 @@ help:
 	@printf "    QEMU             $(QEMU)\n"
 	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
 	@printf "    DEBUG            $(DEBUG)\n"
+	@printf "    CONTAINER_NAME   $(CONTAINER_NAME)\n"
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"
@@ -101,12 +103,12 @@ docker-image:
 	$(DOCKER) build -t $(DOCKER_IMAGE) -f builder_Dockerfile $(CURDIR)
 
 docker:
-	$(DOCKER) run -it --rm --name "Build-LeiOS-$(date +%Y%m%d-%H%M%S)"\
+	$(DOCKER) run -it --rm --name "$(CONTAINER_NAME)"\
 		-v "$(CURDIR):$(CURDIR)" -w "$(CURDIR)"\
 		$(DOCKER_IMAGE) bash -c "make BUILDTYPE=$(BUILDTYPE)"
 
 docker-bash:
-	$(DOCKER) run -it --rm --name "Build-LeiOS-$(date +%Y%m%d-%H%M%S)"\
+	$(DOCKER) run -it --rm --name "$(CONTAINER_NAME)"\
 		-v "$(CURDIR):$(CURDIR)" -w "$(CURDIR)"\
 		$(DOCKER_IMAGE) bash
 

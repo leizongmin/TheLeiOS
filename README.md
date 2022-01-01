@@ -25,3 +25,8 @@ apt install -y qemu-system-x86
 ## 截图
 
 <img src="screenshot.png" width="640px">
+
+## 学习资源
+
+- [intermezzOS - An operating system for learning](https://intermezzos.github.io/book/first-edition/preface.html)
+- [Booting into C](https://www.ics.uci.edu/~aburtsev/238P/hw/hw4-boot-into-c/hw4-boot-into-c.html)
