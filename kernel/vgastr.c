@@ -1,32 +1,51 @@
 #include "vgastr.h"
 
-void _strwrite (char *string)
+char *k_vga_offset = (char *)K_VGA_START;
+int k_vga_offset_line = 0;
+int k_vga_offset_column = 0;
+char k_vga_color = 0xf;
+
+inline void
+k_vgastr_next_line ()
 {
-  _strwrite_color (0, string);
+  k_vga_offset_line++;
+  k_vga_offset_column = 0;
+  k_vga_offset
+      = (char *)K_VGA_START + K_VGA_OFFSET_PER_LINE * k_vga_offset_line;
 }
 
-void _strwrite_color (char color, char *string)
+inline void
+k_vgastr_set_color (char color)
 {
-  char *p_strdst = (char *) (0xb8000);
-  //指向显存的开始地址
-  while (*string)
+  k_vga_color = color;
+}
+
+void
+k_vgastr_write (char *s)
+{
+  while (*s)
     {
-      *p_strdst = *string++;
-      p_strdst += 1;
-      *p_strdst = color;
-      p_strdst += 1;
+      // check newline
+      if (*s == '\n')
+        {
+          k_vgastr_next_line ();
+          s++;
+          continue;
+        }
+
+      // write char
+      *k_vga_offset = *s;
+      s++;
+      k_vga_offset++;
+      // 80 columns per line
+      k_vga_offset_column++;
+      if (k_vga_offset_column >= K_VGA_COLUMNS)
+        {
+          k_vgastr_next_line ();
+        }
+      // set color
+      *k_vga_offset = k_vga_color;
+      k_vga_offset++;
     }
-  return;
-}
-
-void printf (char *fmt, ...)
-{
-  _strwrite (fmt);
-  return;
-}
-
-void printf_color (char color, char *fmt, ...)
-{
-  _strwrite_color (color, fmt);
   return;
 }

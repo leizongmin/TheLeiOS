@@ -1,3 +1,5 @@
+# docs: https://seisman.github.io/how-to-write-makefile/overview.html
+
 UNAME_S 		?= $(shell uname -s)
 KERNEL_DIR 		?= $(CURDIR)/kernel
 TARGET_DIR 		?= $(CURDIR)/target
@@ -7,10 +9,15 @@ ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
-override QEMU_FLAGS 	+= -m 16M -no-reboot -s
+override QEMU_FLAGS 	+= -m 16M -no-reboot -s -D qemu.log
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
+
+# debug mode
+ifeq "$(DEBUG)" "1"
+	override QEMU_FLAGS += -S
+endif
 
 .PHONY: all init clean help kernel iso docker-image docker run
 
@@ -64,6 +71,7 @@ help:
 	@printf "    DOCKER           $(DOCKER)\n"
 	@printf "    QEMU             $(QEMU)\n"
 	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
+	@printf "    DEBUG            $(DEBUG)\n"
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"

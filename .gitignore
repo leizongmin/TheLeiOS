@@ -13,3 +13,5 @@ Cargo.lock
 *.bin
 *.elf
 *.map
+
+*.log
