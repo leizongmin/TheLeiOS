@@ -5,11 +5,13 @@ ASM		?= nasm
 CC		?= gcc
 LD		?= ld
 OBJCOPY		?= objcopy
+OBJDUMP		?= objdump
 # use x86_64-elf-gcc on macOS
 ifeq "$(UNAME_S)" "Darwin"
 	override CC 		:= x86_64-elf-gcc
 	override LD 		:= x86_64-elf-ld
 	override OBJCOPY 	:= x86_64-elf-objcopy
+	override OBJDUMP 	:= x86_64-elf-objdump
 endif
 
 ASMBFLAGS 	?= -g -f elf -F dwarf
@@ -44,6 +46,7 @@ variables:
 	@printf "    CC               $(CC)\n"
 	@printf "    LD               $(LD)\n"
 	@printf "    OBJCOPY          $(OBJCOPY)\n"
+	@printf "    OBJDUMP          $(OBJDUMP)\n"
 	@printf "    ASMBFLAGS        $(ASMBFLAGS)\n"
 	@printf "    CFLAGS           $(CFLAGS)\n"
 	@printf "    LDFLAGS          $(LDFLAGS)\n"
@@ -57,6 +60,7 @@ build: $(KERNEL_OBJS)
 link: $(KERNEL_ELF)
 $(KERNEL_ELF): $(KERNEL_OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(KERNEL_OBJS)
+	$(OBJDUMP) -h $(KERNEL_ELF)
 bin: $(KERNEL_BIN)
 $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OJCYFLAGS) $< $@

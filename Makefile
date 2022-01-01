@@ -92,7 +92,6 @@ kernel:
 
 iso: kernel
 	rm -rf "$(TARGET_DIR)"
-	objdump -h "$(KERNEL_DIR)/kernel.elf"
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
 	cp grub.cfg "$(TARGET_DIR)/isofiles/boot/grub/grub.cfg"
 	cp "$(KERNEL_DIR)/kernel.bin" "$(TARGET_DIR)/isofiles/boot/kernel.bin"
