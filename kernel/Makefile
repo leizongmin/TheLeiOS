@@ -12,9 +12,16 @@ LD		?= ld
 OBJCOPY		?= objcopy
 
 ASMBFLAGS 	?= -f elf -w-orphan-labels
-CFLAGS 		?= -g -c -O0 -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
-LDFLAGS 	?= -s -static -T kernel.lds -n -Map kernel.map
-OJCYFLAGS 	?= -S -O binary
+CFLAGS 		?= -g -O0 -c -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
+LDFLAGS 	?= -static -T kernel.lds -n -Map kernel.map
+OJCYFLAGS 	?= -O binary
+
+# strip debug symbols
+BUILDTYPE 	?= Debug
+ifeq "$(BUILDTYPE)" "Release"
+	override LDFLAGS += -s
+	override OJCYFLAGS += -S
+endif
 
 KERNEL_OBJS 	:= boot.o main.o vgastr.o
 KERNEL_ELF 	?= kernel.elf
@@ -28,6 +35,7 @@ clean:
 	$(RM) -f *.o *.bin *.elf *.map
 
 variables:
+	@printf "    BUILDTYPE        $(BUILDTYPE)\n"
 	@printf "    ASM              $(ASM)\n"
 	@printf "    CC               $(CC)\n"
 	@printf "    LD               $(LD)\n"

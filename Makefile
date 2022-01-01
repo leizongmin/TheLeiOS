@@ -1,16 +1,18 @@
 # docs: https://seisman.github.io/how-to-write-makefile/overview.html
 
+BUILDTYPE 		?= Debug
 UNAME_S 		?= $(shell uname -s)
 KERNEL_DIR 		?= $(CURDIR)/kernel
 TARGET_DIR 		?= $(CURDIR)/target
 DOCKER_IMAGE 		?= leios-build
 ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
-KERNEL_FILE 		?= $(TARGET_DIR)/isofiles/boot/kernel.bin
+KERNEL_BIN_FILE 	?= $(TARGET_DIR)/isofiles/boot/kernel.bin
+KERNEL_ELF_FILE 	?= $(TARGET_DIR)/kernel.elf
 
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
-override QEMU_FLAGS 	+= -smp 2 -m 16M -no-reboot -D qemu.log
+override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
@@ -25,25 +27,25 @@ endif
 
 all:
 	@if [ "$(UNAME_S)" = "Darwin" ]; then\
-		$(MAKE) $(BUILD_TARGET_DARWIN);\
+		$(MAKE) $(BUILD_TARGET_DARWIN) BUILDTYPE=$(BUILDTYPE);\
 	else\
-		$(MAKE) $(BUILD_TARGET_DEFAULT);\
+		$(MAKE) $(BUILD_TARGET_DEFAULT) BUILDTYPE=$(BUILDTYPE);\
 	fi
 
 $(ISO_FILE):
 	@if [ "$(UNAME_S)" = "Darwin" ]; then\
-		$(MAKE) $(BUILD_TARGET_DARWIN);\
+		$(MAKE) $(BUILD_TARGET_DARWIN) BUILDTYPE=$(BUILDTYPE);\
 	else\
-		$(MAKE) $(BUILD_TARGET_DEFAULT);\
+		$(MAKE) $(BUILD_TARGET_DEFAULT) BUILDTYPE=$(BUILDTYPE);\
 	fi
 
 clean:
-	make -C "$(KERNEL_DIR)" clean
+	$(MAKE) -C "$(KERNEL_DIR)" clean BUILDTYPE=$(BUILDTYPE)
 	rm -rf "$(TARGET_DIR)"
 
 init:
 	@if [ "$(UNAME_S)" = "Darwin" ]; then\
-		$(MAKE) docker-image;\
+		$(MAKE) docker-image BUILDTYPE=$(BUILDTYPE);\
 	fi
 
 help:
@@ -56,20 +58,23 @@ help:
 	@printf "    kernel           Build the OS kernel\n"
 	@printf "    iso              Build the bootable iso file\n"
 	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
-	@printf "    docker           Build on docker container (doe none Linux system)\n"
+	@printf "    docker           Build on docker container (for none Linux system)\n"
+	@printf "    docker-bash      Enter the docker container to manual build (for none Linux system)\n"
 	@printf "    run              Run on the QEMU simulator\n"
 	@printf "    gdb              Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
 	@printf "Variables:\n"
 	@printf "\n"
+	@printf "    BUILDTYPE        $(BUILDTYPE)\n"
 	@printf "    CC               $(CC)\n"
 	@printf "    UNAME_S          $(UNAME_S)\n"
 	@printf "    KERNEL_DIR       $(KERNEL_DIR)\n"
 	@printf "    TARGET_DIR       $(TARGET_DIR)\n"
 	@printf "    DOCKER_IMAGE     $(DOCKER_IMAGE)\n"
 	@printf "    ISO_FILE         $(ISO_FILE)\n"
-	@printf "    KERNEL_FILE      $(KERNEL_FILE)\n"
+	@printf "    KERNEL_BIN_FILE  $(KERNEL_BIN_FILE)\n"
+	@printf "    KERNEL_ELF_FILE  $(KERNEL_ELF_FILE)\n"
 	@printf "    DOCKER           $(DOCKER)\n"
 	@printf "    QEMU             $(QEMU)\n"
 	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
@@ -77,11 +82,11 @@ help:
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"
-	@$(MAKE) -C "$(KERNEL_DIR)" variables
+	@$(MAKE) -C "$(KERNEL_DIR)" variables BUILDTYPE=$(BUILDTYPE)
 	@printf "\n"
 
 kernel:
-	make -C "$(KERNEL_DIR)"
+	$(MAKE) -C "$(KERNEL_DIR)" BUILDTYPE=$(BUILDTYPE)
 
 iso: kernel
 	rm -rf "$(TARGET_DIR)"
@@ -98,13 +103,18 @@ docker-image:
 docker:
 	$(DOCKER) run -it --rm --name "Build-LeiOS-$(date +%Y%m%d-%H%M%S)"\
 		-v "$(CURDIR):$(CURDIR)" -w "$(CURDIR)"\
-		$(DOCKER_IMAGE) bash -c "make"
+		$(DOCKER_IMAGE) bash -c "make BUILDTYPE=$(BUILDTYPE)"
+
+docker-bash:
+	$(DOCKER) run -it --rm --name "Build-LeiOS-$(date +%Y%m%d-%H%M%S)"\
+		-v "$(CURDIR):$(CURDIR)" -w "$(CURDIR)"\
+		$(DOCKER_IMAGE) bash
 
 #? QEMU graphic
 run: $(ISO_FILE)
 	$(QEMU) $(QEMU_FLAGS) -monitor stdio -cdrom "$(ISO_FILE)"
 run2: $(ISO_FILE)
-	$(QEMU) $(QEMU_FLAGS) -monitor stdio -kernel "$(KERNEL_FILE)"
+	$(QEMU) $(QEMU_FLAGS) -monitor stdio -kernel "$(KERNEL_BIN_FILE)"
 #? QEMU console
 #? Press Alt + 1 switch to VGA
 #? Press Alt + 2 switch to compat_monitor0 console, and type 'quit' to quit
@@ -113,7 +123,7 @@ run2: $(ISO_FILE)
 run3: $(ISO_FILE)
 	$(QEMU) $(QEMU_FLAGS) -curses -cdrom "$(ISO_FILE)"
 run4: $(ISO_FILE)
-	$(QEMU) $(QEMU_FLAGS) -curses -kernel "$(KERNEL_FILE)"
+	$(QEMU) $(QEMU_FLAGS) -curses -kernel "$(KERNEL_BIN_FILE)"
 
 gdb:
-	$(GDB) -ex "target remote localhost:1234"
+	$(GDB)
