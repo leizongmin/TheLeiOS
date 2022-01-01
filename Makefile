@@ -7,7 +7,7 @@ ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
-override QEMU_FLAGS 	+= -m 16 -no-reboot -s
+override QEMU_FLAGS 	+= -m 16M -no-reboot -s
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
@@ -48,7 +48,8 @@ help:
 	@printf "    iso              Build the bootable iso file\n"
 	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
 	@printf "    docker           Build on docker container (doe none Linux system)\n"
-	@printf "    run              Run on the QEMU virtual machine\n"
+	@printf "    run              Run on the QEMU virtual machine (VGA)\n"
+	@printf "    run2             Run on the QEMU virtual machine (Terminal)\n"
 	@printf "    gdb              Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
@@ -91,6 +92,13 @@ docker:
 
 run: $(ISO_FILE)
 	$(QEMU) -cdrom "$(ISO_FILE)" $(QEMU_FLAGS)
+
+run2: $(ISO_FILE)
+	@printf "Press Alt + 1 switch to VGA.\n"
+	@printf "Press Alt + 2 switch to compat_monitor0 console, and type 'quit' to quit.\n"
+	@printf "Press Alt + 3 switch to serial0 console.\n"
+	@printf "Press Alt + 4 switch to parallel0 console.\n"
+	$(QEMU) -cdrom "$(ISO_FILE)" $(QEMU_FLAGS) -curses
 
 gdb:
 	$(GDB) -ex "target remote localhost:1234"
