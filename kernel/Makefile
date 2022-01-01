@@ -3,8 +3,8 @@ CC		?= gcc
 LD		?= ld
 OBJCOPY		?= objcopy
 
-ASMBFLAGS 	?= -f elf -w-orphan-labels
-CFLAGS 		?= -g -O0 -c -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
+ASMBFLAGS 	?= -g -f elf -F dwarf
+CFLAGS 		?= -g -c -std=c17 -ggdb -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable -Werror
 LDFLAGS 	?= -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 	?= -O binary
 
@@ -13,6 +13,9 @@ BUILDTYPE 	?= Debug
 ifeq "$(BUILDTYPE)" "Release"
 	override LDFLAGS += -s
 	override OJCYFLAGS += -S
+	override CFLAGS += -Oz
+else
+	override CFLAGS += -O1
 endif
 
 KERNEL_OBJS 	:= boot.o main.o vgastr.o
