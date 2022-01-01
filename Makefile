@@ -84,7 +84,6 @@ kernel:
 	make -C "$(KERNEL_DIR)"
 
 iso: kernel
-	mkdir -p "$(TARGET_DIR)"
 	rm -rf "$(TARGET_DIR)"
 	objdump -h "$(KERNEL_DIR)/kernel.elf"
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
