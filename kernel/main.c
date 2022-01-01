@@ -2,5 +2,5 @@
 void main()
 {
   printf("Welcome to The LeiOS!");
-  return;
+  for (;;) {}
 }

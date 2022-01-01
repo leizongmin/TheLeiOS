@@ -4,8 +4,10 @@ TARGET_DIR 				?= $(CURDIR)/target
 DOCKER_IMAGE 			?= leios-build
 ISO_FILE 				?= $(TARGET_DIR)/LeiOS.iso
 
-QEMU 					?= qemu-system-x86_64
+GDB 					?= gdb
 DOCKER 					?= docker
+QEMU 					?= qemu-system-x86_64
+override QEMU_FLAGS 	+= -m 16 -no-reboot -s
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
@@ -46,7 +48,8 @@ help:
 	@printf "    iso              Build the bootable iso file\n"
 	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
 	@printf "    docker           Build on docker container (doe none Linux system)\n"
-	@printf "    run              Build the OS kernel and run on the QEMU virtual machine\n"
+	@printf "    run              Run on the QEMU virtual machine\n"
+	@printf "    gdb              Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
 	@printf "Variables:\n"
@@ -57,8 +60,9 @@ help:
 	@printf "    TARGET_DIR       $(TARGET_DIR)\n"
 	@printf "    DOCKER_IMAGE     $(DOCKER_IMAGE)\n"
 	@printf "    ISO_FILE         $(ISO_FILE)\n"
-	@printf "    QEMU             $(QEMU)\n"
 	@printf "    DOCKER           $(DOCKER)\n"
+	@printf "    QEMU             $(QEMU)\n"
+	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"
@@ -86,4 +90,7 @@ docker:
 		$(DOCKER_IMAGE) bash -c "make"
 
 run: $(ISO_FILE)
-	$(QEMU) -cdrom "$(ISO_FILE)" -m 16 -no-reboot
+	$(QEMU) -cdrom "$(ISO_FILE)" $(QEMU_FLAGS)
+
+gdb:
+	$(GDB) -ex "target remote localhost:1234"

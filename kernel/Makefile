@@ -12,7 +12,7 @@ LD				?= ld
 OBJCOPY			?= objcopy
 
 ASMBFLAGS 		?= -f elf -w-orphan-labels
-CFLAGS 			?= -c -Os -std=c17 -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
+CFLAGS 			?= -g -c -Os -std=c17 -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable
 LDFLAGS 		?= -s -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 		?= -S -O binary
 
