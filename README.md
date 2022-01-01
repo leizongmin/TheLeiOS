@@ -25,7 +25,3 @@ apt install -y qemu-system-x86
 ## 截图
 
 <img src="screenshot.png" width="640px">
-
-## 操作系统学习资料
-
-<img src="geekbang-411.jpg" width="450px">
