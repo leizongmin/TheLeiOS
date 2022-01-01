@@ -1,0 +1,3 @@
+FROM gcc:11
+
+RUN apt-get update && apt install -y nasm grub2 xorriso
