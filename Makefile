@@ -13,7 +13,7 @@ CONTAINER_NAME 		?= Build-LeiOS-$(shell date +%Y%m%d-%H%M%S)
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
-override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log
+override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
