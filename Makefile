@@ -6,7 +6,7 @@ KERNEL_DIR 		?= $(CURDIR)/kernel
 TARGET_DIR 		?= $(CURDIR)/target
 DOCKER_IMAGE 		?= leios-build
 ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
-KERNEL_BIN_FILE 	?= $(TARGET_DIR)/isofiles/boot/kernel.bin
+KERNEL_BIN_FILE 	?= $(TARGET_DIR)/kernel.bin
 KERNEL_ELF_FILE 	?= $(TARGET_DIR)/kernel.elf
 CONTAINER_NAME 		?= Build-LeiOS-$(shell date +%Y%m%d-%H%M%S)
 
@@ -15,30 +15,15 @@ DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
 override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset
 
-BUILD_TARGET_DARWIN 	:= docker
-BUILD_TARGET_DEFAULT 	:= iso
-
 # debug mode
 ifeq "$(DEBUG)" "1"
 	# freeze CPU at startup (use 'c' to start execution)
 	override QEMU_FLAGS += -s -S
 endif
 
-.PHONY: all init clean help kernel iso docker-image docker run run2 run3 run4
+.PHONY: all init clean help kernel iso docker-image docker run run-iso run-iso2 run-kernel run-kernel2
 
-all:
-	@if [ "$(UNAME_S)" = "Darwin" ]; then\
-		$(MAKE) $(BUILD_TARGET_DARWIN) BUILDTYPE=$(BUILDTYPE);\
-	else\
-		$(MAKE) $(BUILD_TARGET_DEFAULT) BUILDTYPE=$(BUILDTYPE);\
-	fi
-
-$(ISO_FILE):
-	@if [ "$(UNAME_S)" = "Darwin" ]; then\
-		$(MAKE) $(BUILD_TARGET_DARWIN) BUILDTYPE=$(BUILDTYPE);\
-	else\
-		$(MAKE) $(BUILD_TARGET_DEFAULT) BUILDTYPE=$(BUILDTYPE);\
-	fi
+all: clean kernel
 
 clean:
 	$(MAKE) -C "$(KERNEL_DIR)" clean BUILDTYPE=$(BUILDTYPE)
@@ -61,7 +46,8 @@ help:
 	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
 	@printf "    docker           Build on docker container (for none Linux system)\n"
 	@printf "    docker-bash      Enter the docker container to manual build (for none Linux system)\n"
-	@printf "    run              Run on the QEMU simulator\n"
+	@printf "    run-iso          Run on the QEMU simulator via iso file\n"
+	@printf "    run-kernel       Run on the QEMU simulator via bin file\n"
 	@printf "    gdb              Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
@@ -89,13 +75,14 @@ help:
 
 kernel:
 	$(MAKE) -C "$(KERNEL_DIR)" BUILDTYPE=$(BUILDTYPE)
+	mkdir -p $(TARGET_DIR)
+	cp "$(KERNEL_DIR)/kernel.elf" "$(KERNEL_ELF_FILE)"
+	cp "$(KERNEL_DIR)/kernel.bin" "$(KERNEL_BIN_FILE)"
 
 iso: kernel
-	rm -rf "$(TARGET_DIR)"
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
 	cp grub.cfg "$(TARGET_DIR)/isofiles/boot/grub/grub.cfg"
-	cp "$(KERNEL_DIR)/kernel.bin" "$(TARGET_DIR)/isofiles/boot/kernel.bin"
-	cp "$(KERNEL_DIR)/kernel.elf" "$(TARGET_DIR)/kernel.elf"
+	cp "$(KERNEL_BIN_FILE)" "$(TARGET_DIR)/isofiles/boot/kernel.bin"
 	grub-mkrescue -o "$(ISO_FILE)" "$(TARGET_DIR)/isofiles"
 
 docker-image:
@@ -112,18 +99,18 @@ docker-bash:
 		$(DOCKER_IMAGE) bash
 
 #? QEMU graphic
-run: $(ISO_FILE)
+run-iso: $(ISO_FILE)
 	$(QEMU) $(QEMU_FLAGS) -monitor stdio -cdrom "$(ISO_FILE)"
-run2: $(ISO_FILE)
+run-kernel: $(KERNEL_BIN_FILE)
 	$(QEMU) $(QEMU_FLAGS) -monitor stdio -kernel "$(KERNEL_BIN_FILE)"
 #? QEMU console
 #? Press Alt + 1 switch to VGA
 #? Press Alt + 2 switch to compat_monitor0 console, and type 'quit' to quit
 #? Press Alt + 3 switch to serial0 console
 #? Press Alt + 4 switch to parallel0 console
-run3: $(ISO_FILE)
+run-iso2: $(ISO_FILE)
 	$(QEMU) $(QEMU_FLAGS) -curses -cdrom "$(ISO_FILE)"
-run4: $(ISO_FILE)
+run-kernel2: $(KERNEL_BIN_FILE)
 	$(QEMU) $(QEMU_FLAGS) -curses -kernel "$(KERNEL_BIN_FILE)"
 
 gdb:
