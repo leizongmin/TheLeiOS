@@ -1,11 +1,3 @@
-MAKEFLAGS 	?= -sR
-MKDIR 		?= mkdir
-RMDIR 		?= rmdir
-CP 		?= cp
-CD 		?= cd
-DD 		?= dd
-RM 		?= rm
-
 ASM		?= nasm
 CC		?= gcc
 LD		?= ld
@@ -40,7 +32,6 @@ variables:
 	@printf "    CC               $(CC)\n"
 	@printf "    LD               $(LD)\n"
 	@printf "    OBJCOPY          $(OBJCOPY)\n"
-	@printf "    MAKEFLAGS        $(MAKEFLAGS)\n"
 	@printf "    ASMBFLAGS        $(ASMBFLAGS)\n"
 	@printf "    CFLAGS           $(CFLAGS)\n"
 	@printf "    LDFLAGS          $(LDFLAGS)\n"
