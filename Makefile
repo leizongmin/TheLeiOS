@@ -5,21 +5,23 @@ KERNEL_DIR 		?= $(CURDIR)/kernel
 TARGET_DIR 		?= $(CURDIR)/target
 DOCKER_IMAGE 		?= leios-build
 ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
+KERNEL_FILE 		?= $(TARGET_DIR)/isofiles/boot/kernel.bin
 
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
-override QEMU_FLAGS 	+= -m 16M -no-reboot -s -D qemu.log
+override QEMU_FLAGS 	+= -smp 2 -m 16M -no-reboot -D qemu.log
 
 BUILD_TARGET_DARWIN 	:= docker
 BUILD_TARGET_DEFAULT 	:= iso
 
 # debug mode
 ifeq "$(DEBUG)" "1"
-	override QEMU_FLAGS += -S
+	# freeze CPU at startup (use 'c' to start execution)
+	override QEMU_FLAGS += -s -S
 endif
 
-.PHONY: all init clean help kernel iso docker-image docker run
+.PHONY: all init clean help kernel iso docker-image docker run run2 run3 run4
 
 all:
 	@if [ "$(UNAME_S)" = "Darwin" ]; then\
@@ -55,8 +57,7 @@ help:
 	@printf "    iso              Build the bootable iso file\n"
 	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
 	@printf "    docker           Build on docker container (doe none Linux system)\n"
-	@printf "    run              Run on the QEMU virtual machine (VGA)\n"
-	@printf "    run2             Run on the QEMU virtual machine (Terminal)\n"
+	@printf "    run              Run on the QEMU simulator\n"
 	@printf "    gdb              Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
@@ -68,6 +69,7 @@ help:
 	@printf "    TARGET_DIR       $(TARGET_DIR)\n"
 	@printf "    DOCKER_IMAGE     $(DOCKER_IMAGE)\n"
 	@printf "    ISO_FILE         $(ISO_FILE)\n"
+	@printf "    KERNEL_FILE      $(KERNEL_FILE)\n"
 	@printf "    DOCKER           $(DOCKER)\n"
 	@printf "    QEMU             $(QEMU)\n"
 	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
@@ -88,6 +90,7 @@ iso: kernel
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
 	cp grub.cfg "$(TARGET_DIR)/isofiles/boot/grub/grub.cfg"
 	cp "$(KERNEL_DIR)/kernel.bin" "$(TARGET_DIR)/isofiles/boot/kernel.bin"
+	cp "$(KERNEL_DIR)/kernel.elf" "$(TARGET_DIR)/kernel.elf"
 	grub-mkrescue -o "$(ISO_FILE)" "$(TARGET_DIR)/isofiles"
 
 docker-image:
@@ -98,15 +101,20 @@ docker:
 		-v "$(CURDIR):$(CURDIR)" -w "$(CURDIR)"\
 		$(DOCKER_IMAGE) bash -c "make"
 
+#? QEMU graphic
 run: $(ISO_FILE)
-	$(QEMU) -cdrom "$(ISO_FILE)" $(QEMU_FLAGS)
-
+	$(QEMU) $(QEMU_FLAGS) -monitor stdio -cdrom "$(ISO_FILE)"
 run2: $(ISO_FILE)
-	@printf "Press Alt + 1 switch to VGA.\n"
-	@printf "Press Alt + 2 switch to compat_monitor0 console, and type 'quit' to quit.\n"
-	@printf "Press Alt + 3 switch to serial0 console.\n"
-	@printf "Press Alt + 4 switch to parallel0 console.\n"
-	$(QEMU) -cdrom "$(ISO_FILE)" $(QEMU_FLAGS) -curses
+	$(QEMU) $(QEMU_FLAGS) -monitor stdio -kernel "$(KERNEL_FILE)"
+#? QEMU console
+#? Press Alt + 1 switch to VGA
+#? Press Alt + 2 switch to compat_monitor0 console, and type 'quit' to quit
+#? Press Alt + 3 switch to serial0 console
+#? Press Alt + 4 switch to parallel0 console
+run3: $(ISO_FILE)
+	$(QEMU) $(QEMU_FLAGS) -curses -cdrom "$(ISO_FILE)"
+run4: $(ISO_FILE)
+	$(QEMU) $(QEMU_FLAGS) -curses -kernel "$(KERNEL_FILE)"
 
 gdb:
 	$(GDB) -ex "target remote localhost:1234"

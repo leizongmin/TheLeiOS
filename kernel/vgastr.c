@@ -1,51 +1,75 @@
 #include "vgastr.h"
 
-char *k_vga_offset = (char *)K_VGA_START;
-int k_vga_offset_line = 0;
-int k_vga_offset_column = 0;
-char k_vga_color = 0xf;
+char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
+unsigned int k_vgastr_offset_row = 0;
+unsigned int k_vgastr_offset_column = 0;
+char k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
-inline void
-k_vgastr_next_line ()
+void
+k_vgastr_reset (char color, char fill)
 {
-  k_vga_offset_line++;
-  k_vga_offset_column = 0;
-  k_vga_offset
-      = (char *)K_VGA_START + K_VGA_OFFSET_PER_LINE * k_vga_offset_line;
+  char *ptr = (char *)K_VGASTR_START;
+  for (int i = 0; i < K_VGASTR_ROWS; i++)
+    {
+      for (int j = 0; j < K_VGASTR_COLUMNS; j++)
+        {
+          *ptr = fill;
+          ptr++;
+          *ptr = color;
+          ptr++;
+        }
+    }
+  k_vgastr_offset_ptr = (char *)K_VGASTR_START;
 }
 
 inline void
-k_vgastr_set_color (char color)
+k_vgastr_next_row ()
 {
-  k_vga_color = color;
+  k_vgastr_offset_row++;
+  k_vgastr_offset_column = 0;
+  k_vgastr_offset_ptr
+      = (char *)(K_VGASTR_START
+                 + K_VGASTR_OFFSET_PER_ROW * k_vgastr_offset_row);
+}
+
+inline void
+k_vgastr_set_color (char c)
+{
+  k_vgastr_color = c;
+}
+
+inline void
+k_vgastr_write (char c)
+{
+  *k_vgastr_offset_ptr = c;
+  k_vgastr_offset_ptr++;
+  *k_vgastr_offset_ptr = k_vgastr_color;
+  k_vgastr_offset_ptr++;
+
+  k_vgastr_offset_column++;
+
+  // 80 columns per row
+  if (k_vgastr_offset_column >= K_VGASTR_COLUMNS)
+    {
+      k_vgastr_next_row ();
+    }
 }
 
 void
-k_vgastr_write (char *s)
+k_vgastr_write_string (char *s)
 {
   while (*s)
     {
       // check newline
       if (*s == '\n')
         {
-          k_vgastr_next_line ();
-          s++;
-          continue;
+          k_vgastr_next_row ();
         }
-
-      // write char
-      *k_vga_offset = *s;
-      s++;
-      k_vga_offset++;
-      // 80 columns per line
-      k_vga_offset_column++;
-      if (k_vga_offset_column >= K_VGA_COLUMNS)
+      else
         {
-          k_vgastr_next_line ();
+          k_vgastr_write (*s);
         }
-      // set color
-      *k_vga_offset = k_vga_color;
-      k_vga_offset++;
+      s++;
     }
   return;
 }
