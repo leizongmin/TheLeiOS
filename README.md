@@ -9,6 +9,7 @@
 - Docker，用于执行编译构建工具；
 - Qemu，用于运行构建好的系统镜像；
 - 执行 `make init` 初始化构建环境；
+- 执行 `brew install x86_64-elf-gcc` 安装 GCC 编译器；
 
 如果以 Linux 作为开发环境，以 Debian/Ubuntu 系统为例，需要执行命令安装必要的工具：
 

@@ -1,7 +1,16 @@
+BUILDTYPE 	?= Debug
+UNAME_S 	?= $(shell uname -s)
+
 ASM		?= nasm
 CC		?= gcc
 LD		?= ld
 OBJCOPY		?= objcopy
+# use x86_64-elf-gcc on macOS
+ifeq "$(UNAME_S)" "Darwin"
+	override CC 		:= x86_64-elf-gcc
+	override LD 		:= x86_64-elf-ld
+	override OBJCOPY 	:= x86_64-elf-objcopy
+endif
 
 ASMBFLAGS 	?= -g -f elf -F dwarf
 CFLAGS 		?= -g -c -std=c17 -ggdb -nostdlib -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable -Werror
@@ -9,7 +18,6 @@ LDFLAGS 	?= -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 	?= -O binary
 
 # strip debug symbols
-BUILDTYPE 	?= Debug
 ifeq "$(BUILDTYPE)" "Release"
 	override LDFLAGS += -s
 	override OJCYFLAGS += -S
@@ -31,6 +39,7 @@ clean:
 
 variables:
 	@printf "    BUILDTYPE        $(BUILDTYPE)\n"
+	@printf "    UNAME_S          $(UNAME_S)\n"
 	@printf "    ASM              $(ASM)\n"
 	@printf "    CC               $(CC)\n"
 	@printf "    LD               $(LD)\n"
