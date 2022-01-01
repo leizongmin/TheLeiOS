@@ -10,7 +10,12 @@
 - Qemu，用于运行构建好的系统镜像；
 - 执行 `make init` 初始化构建环境；
 
-如果以 Linux 作为开发环境，以 Debian/Ubuntu 系统为例，需要执行命令 `apt install -y gcc nasm grub2 xorriso` 安装必要的工具；
+如果以 Linux 作为开发环境，以 Debian/Ubuntu 系统为例，需要执行命令安装必要的工具：
+
+```bash
+apt install -y gcc nasm grub2 xorriso
+apt install -y qemu-system-x86
+```
 
 ## 开发过程
 
