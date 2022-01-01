@@ -22,8 +22,10 @@ apt install -y qemu-system-x86
 
 ## 开发过程
 
-- 执行命令 `make` 构建，最终会输出 `target/LeiOS.iso` 的 CDROOM 镜像文件；
-- 执行命令 `make run` 在 QEMU 模拟器中启动操作系统；
+- 执行命令 `make kernel` 构建；
+- 执行命令 `make run-kernel` 在 QEMU 模拟器中启动；
+- 执行命令 `make run-kernel DEBUG=1` 在 QEMU 模拟器中启动并开启 GDB 调试；
+- 执行命令 `make gdb` 连接 GDB 调试；
 
 ## 截图
 
