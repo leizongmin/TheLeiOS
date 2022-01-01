@@ -7,6 +7,8 @@
  * ASCII Table: https://www.asciitable.com/
  */
 
+#include <stdint.h>
+
 #define K_VGASTR_START 0xb8000
 #define K_VGASTR_COLUMNS 80
 #define K_VGASTR_ROWS 25
@@ -30,11 +32,11 @@
 #define K_VGASTR_COLOR_WHITE 15
 
 extern char *k_vgastr_offset_ptr;
-extern unsigned int k_vgastr_offset_row;
-extern unsigned int k_vgastr_offset_column;
-extern char k_vgastr_color;
+extern uint32_t k_vgastr_offset_row;
+extern uint32_t k_vgastr_offset_column;
+extern uint8_t k_vgastr_color;
 
-void k_vgastr_reset (char color, char fill);
+void k_vgastr_reset (uint8_t color, char fill);
 void k_vgastr_next_row ();
 void k_vgastr_set_color (char c);
 void k_vgastr_write (char c);

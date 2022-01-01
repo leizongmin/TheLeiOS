@@ -1,12 +1,12 @@
 #include "vgastr.h"
 
 char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
-unsigned int k_vgastr_offset_row = 0;
-unsigned int k_vgastr_offset_column = 0;
-char k_vgastr_color = K_VGASTR_COLOR_WHITE;
+uint32_t k_vgastr_offset_row = 0;
+uint32_t k_vgastr_offset_column = 0;
+uint8_t k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
 void
-k_vgastr_reset (char color, char fill)
+k_vgastr_reset (uint8_t color, char fill)
 {
   char *ptr = (char *)K_VGASTR_START;
   for (int i = 0; i < K_VGASTR_ROWS; i++)
