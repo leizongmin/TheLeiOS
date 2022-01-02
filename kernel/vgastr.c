@@ -45,29 +45,30 @@ void k_vgastr_next_row() {
 void k_vgastr_set_color(u8 color) { k_vgastr_color = color; }
 
 void k_vgastr_write(char c) {
-  *k_vgastr_offset_ptr = c;
-  k_vgastr_offset_ptr++;
-  *k_vgastr_offset_ptr = (char)k_vgastr_color;
-  k_vgastr_offset_ptr++;
-
-  k_vgastr_offset_column++;
-
-  // 80 columns per row
-  if (k_vgastr_offset_column >= K_VGASTR_COLUMNS) {
+  if (c == '\n') {
+    // newline
     k_vgastr_next_row();
-  }
+  } else if (c < 32) {
+    // invisible
+  } else {
+    *k_vgastr_offset_ptr = c;
+    k_vgastr_offset_ptr++;
+    *k_vgastr_offset_ptr = (char)k_vgastr_color;
+    k_vgastr_offset_ptr++;
 
+    k_vgastr_offset_column++;
+
+    // 80 columns per row
+    if (k_vgastr_offset_column >= K_VGASTR_COLUMNS) {
+      k_vgastr_next_row();
+    }
+  }
   k_vgastr_cursor_refresh();
 }
 
-void k_vgastr_write_string(const char *s) {
+void k_vgastr_write_str(const char *s) {
   while (*s) {
-    // check newline
-    if (*s == '\n') {
-      k_vgastr_next_row();
-    } else {
-      k_vgastr_write(*s);
-    }
+    k_vgastr_write(*s);
     s++;
   }
   k_vgastr_cursor_refresh();
@@ -110,23 +111,23 @@ void k_vgastr_printf(const char *fmt, ...) {
           k_vgastr_write((char)va_arg(args, int));
           break;
         case 's':  // string
-          k_vgastr_write_string(va_arg(args, char *));
+          k_vgastr_write_str(va_arg(args, char *));
           break;
         case 'b':  // binary
           k_i32_to_str(buf, buf_size, va_arg(args, u32), 2);
-          k_vgastr_write_string(buf);
+          k_vgastr_write_str(buf);
           break;
         case 'o':  // octonary
           k_i32_to_str(buf, buf_size, va_arg(args, u32), 8);
-          k_vgastr_write_string(buf);
+          k_vgastr_write_str(buf);
           break;
         case 'd':  // decimal
           k_i32_to_str(buf, buf_size, va_arg(args, i32), 10);
-          k_vgastr_write_string(buf);
+          k_vgastr_write_str(buf);
           break;
         case 'x':  // hexadecimal
           k_i32_to_str(buf, buf_size, va_arg(args, u32), 16);
-          k_vgastr_write_string(buf);
+          k_vgastr_write_str(buf);
           break;
         case '%':  // %
           k_vgastr_write(*fmt);
