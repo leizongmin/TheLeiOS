@@ -10,6 +10,8 @@
 #include <stdint.h>
 
 #define K_VGASTR_START 0xb8000
+#define K_VGASTR_END 0xb8fa0
+#define K_VGASTR_LAST_ROW_START 0xb8f00
 #define K_VGASTR_COLUMNS 80
 #define K_VGASTR_ROWS 25
 #define K_VGASTR_OFFSET_PER_ROW 160
@@ -36,10 +38,10 @@ extern uint32_t k_vgastr_offset_row;
 extern uint32_t k_vgastr_offset_column;
 extern uint8_t k_vgastr_color;
 
-void k_vgastr_reset (uint8_t color, char fill);
-void k_vgastr_next_row ();
-void k_vgastr_set_color (char c);
-void k_vgastr_write (char c);
-void k_vgastr_write_string (char *s);
+void k_vgastr_reset(uint8_t color, char fill);
+void k_vgastr_next_row();
+void k_vgastr_set_color(char c);
+void k_vgastr_write(char c);
+void k_vgastr_write_string(char *s);
 
-#endif
+#endif  // _KERNEL_VGASTR_H

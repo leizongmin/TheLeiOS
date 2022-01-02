@@ -15,7 +15,7 @@ ifeq "$(UNAME_S)" "Darwin"
 endif
 
 ASMBFLAGS 	?= -g -f elf -F dwarf
-CFLAGS 		?= -g -c -std=c17 -ggdb -nostdlib -static -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable -Werror
+CFLAGS 		?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable -Werror
 LDFLAGS 	?= -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 	?= -O binary
 
@@ -28,7 +28,7 @@ else
 	override CFLAGS += -O0
 endif
 
-KERNEL_OBJS 	:= boot.o main.o vgastr.o
+KERNEL_OBJS 	:= boot.o nostdlib.o main.o vgastr.o
 KERNEL_ELF 	?= kernel.elf
 KERNEL_BIN 	?= kernel.bin
 
