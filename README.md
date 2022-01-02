@@ -65,3 +65,5 @@ apt install -y qemu-system-x86
 
 - [intermezzOS - An operating system for learning](https://intermezzos.github.io/book/first-edition/preface.html)
 - [Booting into C](https://www.ics.uci.edu/~aburtsev/238P/hw/hw4-boot-into-c/hw4-boot-into-c.html)
+- [OS Development Tutorials](http://www.osdever.net/tutorials/index)
+- [OS Dev Tutorials](https://wiki.osdev.org/Tutorials)
