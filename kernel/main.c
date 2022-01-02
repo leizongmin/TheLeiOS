@@ -43,6 +43,7 @@ void welcome() {
     k_vgastr_write_string("aa == aa");
   }
 
+  k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_RED + (K_VGASTR_COLOR_BLUE << 4));
   k_vgastr_printf(
       "++hello %% char=%c string=%s bin=%b oct=%o dec=%d hex=%x end", 'x',
       "world", k_vgastr_offset_ptr, k_vgastr_offset_ptr, k_vgastr_offset_ptr,

@@ -2,6 +2,7 @@
 
 #include <stdarg.h>
 
+#include "io.h"
 #include "nostdlib.h"
 
 volatile char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
