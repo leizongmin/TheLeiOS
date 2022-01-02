@@ -3,15 +3,15 @@
 #include "nostdlib.h"
 
 char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
-uint16_t k_vgastr_offset_row = 0;
-uint16_t k_vgastr_offset_column = 0;
-uint8_t k_vgastr_color = K_VGASTR_COLOR_WHITE;
+u16 k_vgastr_offset_row = 0;
+u16 k_vgastr_offset_column = 0;
+u8 k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
 void k_vgastr_clear() {
   k_memset((void *)K_VGASTR_START, 0, K_VGASTR_END - K_VGASTR_START);
 }
 
-void k_vgastr_fill(uint8_t color, char fill) {
+void k_vgastr_fill(u8 color, char fill) {
   char *ptr = (char *)K_VGASTR_START;
   for (int i = 0; i < K_VGASTR_ROWS; i++) {
     for (int j = 0; j < K_VGASTR_COLUMNS; j++) {
@@ -72,26 +72,26 @@ void k_vgastr_write_string(char *s) {
   k_vgastr_cursor_refresh();
 }
 
-uint16_t k_vgastr_cursor_get() {
+u16 k_vgastr_cursor_get() {
   k_outb(0x03d4, 14);
-  uint8_t cursor_pos_h = k_inb(0x03d5);
+  u8 cursor_pos_h = k_inb(0x03d5);
   k_outb(0x03d4, 15);
-  uint8_t cursor_pos_l = k_inb(0x03d5);
-  return (uint16_t)((cursor_pos_h << 8) | cursor_pos_l);
+  u8 cursor_pos_l = k_inb(0x03d5);
+  return (u16)((cursor_pos_h << 8) | cursor_pos_l);
 }
 
-void k_vgastr_cursor_set(uint16_t x, uint16_t y) {
-  uint16_t cursor_pos = (uint16_t)(y * 80 + x);
+void k_vgastr_cursor_set(u16 x, u16 y) {
+  u16 cursor_pos = (u16)(y * 80 + x);
   k_outb(0x03d4, 14);
-  k_outb(0x03d5, (uint8_t)((cursor_pos >> 8) & 0xff));
+  k_outb(0x03d5, (u8)((cursor_pos >> 8) & 0xff));
   k_outb(0x03d4, 15);
-  k_outb(0x03d5, (uint8_t)(cursor_pos & 0xff));
+  k_outb(0x03d5, (u8)(cursor_pos & 0xff));
 }
 
 void k_vgastr_cursor_refresh() {
   // update cursor position
-  uint16_t y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1
-                                                    : k_vgastr_offset_row;
+  u16 y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1
+                                               : k_vgastr_offset_row;
   k_vgastr_cursor_set(k_vgastr_offset_column, y);
   // update the color of next char, or else we cannot see the cursor
   *(k_vgastr_offset_ptr + 1) = K_VGASTR_COLOR_LIGHT_GREY;

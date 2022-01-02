@@ -4,17 +4,28 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define u8 uint8_t
+#define u16 uint16_t
+#define u32 uint32_t
+#define u64 uint64_t
+#define i8 int8_t
+#define i16 int16_t
+#define i32 int32_t
+#define i64 int64_t
+#define f32 float
+#define f64 double
+
 static inline void *k_memcpy(void *dest, const void *src, size_t count) {
-  uint8_t *d = dest;
-  const uint8_t *s = src;
+  u8 *d = dest;
+  const u8 *s = src;
   while (count--) {
     *d++ = *s++;
   }
   return dest;
 }
 
-static inline void *k_memset(void *dest, uint8_t ch, size_t count) {
-  uint8_t *d = dest;
+static inline void *k_memset(void *dest, u8 ch, size_t count) {
+  u8 *d = dest;
   while (count--) {
     *d++ = ch;
   }
@@ -23,13 +34,13 @@ static inline void *k_memset(void *dest, uint8_t ch, size_t count) {
 
 static inline void k_halt(void) { __asm__ volatile("hlt" : :); }
 
-static inline uint8_t k_inb(uint16_t port) {
-  uint8_t data;
+static inline u8 k_inb(u16 port) {
+  u8 data;
   __asm__ volatile("inb %%dx,%%al" : "=a"(data) : "d"(port));
   return data;
 }
 
-static inline void k_outb(uint16_t port, uint8_t data) {
+static inline void k_outb(u16 port, u8 data) {
   __asm__ volatile("outb %%al,%%dx" : : "a"(data), "d"(port));
 }
 
