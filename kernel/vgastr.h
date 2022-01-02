@@ -34,14 +34,19 @@
 #define K_VGASTR_COLOR_WHITE 15
 
 extern char *k_vgastr_offset_ptr;
-extern uint32_t k_vgastr_offset_row;
-extern uint32_t k_vgastr_offset_column;
+extern uint16_t k_vgastr_offset_row;
+extern uint16_t k_vgastr_offset_column;
 extern uint8_t k_vgastr_color;
 
-void k_vgastr_reset(uint8_t color, char fill);
+void k_vgastr_clear();
+void k_vgastr_fill(uint8_t color, char fill);
 void k_vgastr_next_row();
 void k_vgastr_set_color(char c);
 void k_vgastr_write(char c);
 void k_vgastr_write_string(char *s);
+
+uint16_t k_vgastr_cursor_get();
+void k_vgastr_cursor_set(uint16_t x, uint16_t y);
+void k_vgastr_cursor_refresh();
 
 #endif  // _KERNEL_VGASTR_H
