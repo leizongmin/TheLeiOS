@@ -10,9 +10,7 @@ volatile u16 k_vgastr_offset_row = 0;
 volatile u16 k_vgastr_offset_column = 0;
 volatile u8 k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
-void k_vgastr_clear() {
-  k_memset((void *)K_VGASTR_START, 0, K_VGASTR_END - K_VGASTR_START);
-}
+void k_vgastr_clear(u8 color) { k_vgastr_fill(color, 0); }
 
 void k_vgastr_fill(u8 color, char fill) {
   char *ptr = (char *)K_VGASTR_START;
@@ -44,7 +42,7 @@ void k_vgastr_next_row() {
       (char *)(K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW * k_vgastr_offset_row);
 }
 
-void k_vgastr_set_color(char c) { k_vgastr_color = c; }
+void k_vgastr_set_color(u8 color) { k_vgastr_color = color; }
 
 void k_vgastr_write(char c) {
   *k_vgastr_offset_ptr = c;

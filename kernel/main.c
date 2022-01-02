@@ -2,8 +2,7 @@
 #include "vgastr.h"
 
 void welcome() {
-  k_vgastr_fill(K_VGASTR_COLOR_DARK_GREY, (char)178);
-  k_vgastr_clear();
+  k_vgastr_clear(K_VGASTR_BGCOLOR_DARK_GREY);
   k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_RED);
   k_vgastr_write_string("    Welcome to the LeiOS!\n\n");
 
@@ -43,7 +42,7 @@ void welcome() {
     k_vgastr_write_string("aa == aa");
   }
 
-  k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_RED + (K_VGASTR_COLOR_BLUE << 4));
+  k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_RED + K_VGASTR_BGCOLOR_BLUE);
   k_vgastr_printf(
       "++hello %% char=%c string=%s bin=%b oct=%o dec=%d hex=%x end", 'x',
       "world", k_vgastr_offset_ptr, k_vgastr_offset_ptr, k_vgastr_offset_ptr,

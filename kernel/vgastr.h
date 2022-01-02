@@ -35,15 +35,25 @@
 #define K_VGASTR_COLOR_LIGHT_BROWN 14
 #define K_VGASTR_COLOR_WHITE 15
 
+#define K_VGASTR_BGCOLOR_BLACK 0
+#define K_VGASTR_BGCOLOR_BLUE 16
+#define K_VGASTR_BGCOLOR_GREEN 32
+#define K_VGASTR_BGCOLOR_CYAN 48
+#define K_VGASTR_BGCOLOR_RED 64
+#define K_VGASTR_BGCOLOR_MAGENTA 80
+#define K_VGASTR_BGCOLOR_BROWN 96
+#define K_VGASTR_BGCOLOR_LIGHT_GREY 112
+#define K_VGASTR_BGCOLOR_DARK_GREY 128
+
 extern volatile char *k_vgastr_offset_ptr;
 extern volatile u16 k_vgastr_offset_row;
 extern volatile u16 k_vgastr_offset_column;
 extern volatile u8 k_vgastr_color;
 
-void k_vgastr_clear();
+void k_vgastr_clear(u8 color);
 void k_vgastr_fill(u8 color, char fill);
 void k_vgastr_next_row();
-void k_vgastr_set_color(char c);
+void k_vgastr_set_color(u8 color);
 void k_vgastr_write(char c);
 void k_vgastr_write_string(const char *s);
 void k_vgastr_printf(const char *fmt, ...);
