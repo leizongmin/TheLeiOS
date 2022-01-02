@@ -45,7 +45,8 @@ void k_vgastr_fill(u8 color, char fill);
 void k_vgastr_next_row();
 void k_vgastr_set_color(char c);
 void k_vgastr_write(char c);
-void k_vgastr_write_string(char *s);
+void k_vgastr_write_string(const char *s);
+void k_vgastr_printf(const char *fmt, ...);
 
 u16 k_vgastr_cursor_get();
 void k_vgastr_cursor_set(u16 x, u16 y);

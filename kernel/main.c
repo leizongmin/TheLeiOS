@@ -42,6 +42,11 @@ void welcome() {
   if (k_strcmp("aa", "aa") == 0) {
     k_vgastr_write_string("aa == aa");
   }
+
+  k_vgastr_printf(
+      "++hello %% char=%c string=%s bin=%b oct=%o dec=%d hex=%x end", 'x',
+      "world", k_vgastr_offset_ptr, k_vgastr_offset_ptr, k_vgastr_offset_ptr,
+      k_vgastr_offset_ptr);
 }
 
 __attribute__((unused)) void k_main() { welcome(); }

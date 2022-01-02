@@ -14,6 +14,7 @@
 #define i64 int64_t
 #define f32 float
 #define f64 double
+#define usize size_t
 
 static inline void *k_memcpy(void *dest, const void *src, size_t count) {
   u8 *d = dest;
@@ -45,5 +46,7 @@ static inline void k_outb(u16 port, u8 data) {
 }
 
 int k_strcmp(const char *s1, const char *s2);
+
+usize k_i32_to_str(char *buf, usize buf_size, i32 num, i32 radix);
 
 #endif  //_KERNEL_NOSTDLIB_H_

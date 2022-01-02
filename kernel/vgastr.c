@@ -1,5 +1,7 @@
 #include "vgastr.h"
 
+#include <stdarg.h>
+
 #include "nostdlib.h"
 
 volatile char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
@@ -59,7 +61,7 @@ void k_vgastr_write(char c) {
   k_vgastr_cursor_refresh();
 }
 
-void k_vgastr_write_string(char *s) {
+void k_vgastr_write_string(const char *s) {
   while (*s) {
     // check newline
     if (*s == '\n') {
@@ -95,4 +97,50 @@ void k_vgastr_cursor_refresh() {
   k_vgastr_cursor_set(k_vgastr_offset_column, y);
   // update the color of next char, or else we cannot see the cursor
   *(k_vgastr_offset_ptr + 1) = K_VGASTR_COLOR_LIGHT_GREY;
+}
+
+void k_vgastr_printf(const char *fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  const usize buf_size = 1024;
+  char buf[buf_size];
+  while (*fmt) {
+    if (*fmt == '%') {
+      switch (*(fmt + 1)) {
+        case 'c':  // char
+          k_vgastr_write((char)va_arg(args, int));
+          break;
+        case 's':  // string
+          k_vgastr_write_string(va_arg(args, char *));
+          break;
+        case 'b':  // binary
+          k_i32_to_str(buf, buf_size, va_arg(args, u32), 2);
+          k_vgastr_write_string(buf);
+          break;
+        case 'o':  // octonary
+          k_i32_to_str(buf, buf_size, va_arg(args, u32), 8);
+          k_vgastr_write_string(buf);
+          break;
+        case 'd':  // decimal
+          k_i32_to_str(buf, buf_size, va_arg(args, i32), 10);
+          k_vgastr_write_string(buf);
+          break;
+        case 'x':  // hexadecimal
+          k_i32_to_str(buf, buf_size, va_arg(args, u32), 16);
+          k_vgastr_write_string(buf);
+          break;
+        case '%':  // %
+          k_vgastr_write(*fmt);
+          break;
+        default:  // not support
+          k_vgastr_write(*fmt);
+          break;
+      }
+      fmt += 2;
+    } else {
+      k_vgastr_write(*fmt);
+      fmt++;
+    }
+  }
+  va_end(args);
 }
