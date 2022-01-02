@@ -7,7 +7,9 @@ uint16_t k_vgastr_offset_row = 0;
 uint16_t k_vgastr_offset_column = 0;
 uint8_t k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
-void k_vgastr_clear() { k_memset((void *)K_VGASTR_START, 0, K_VGASTR_END - K_VGASTR_START); }
+void k_vgastr_clear() {
+  k_memset((void *)K_VGASTR_START, 0, K_VGASTR_END - K_VGASTR_START);
+}
 
 void k_vgastr_fill(uint8_t color, char fill) {
   char *ptr = (char *)K_VGASTR_START;
@@ -28,13 +30,15 @@ void k_vgastr_next_row() {
 
   // if hit the bottom, scroll one line
   if (k_vgastr_offset_row >= K_VGASTR_ROWS) {
-    k_memcpy((void *)K_VGASTR_START, (void *)K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW,
+    k_memcpy((void *)K_VGASTR_START,
+             (void *)K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW,
              K_VGASTR_LAST_ROW_START - K_VGASTR_START);
     k_memset((void *)(K_VGASTR_LAST_ROW_START), 0, K_VGASTR_OFFSET_PER_ROW);
     k_vgastr_offset_row--;
   }
 
-  k_vgastr_offset_ptr = (char *)(K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW * k_vgastr_offset_row);
+  k_vgastr_offset_ptr =
+      (char *)(K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW * k_vgastr_offset_row);
 }
 
 void k_vgastr_set_color(char c) { k_vgastr_color = c; }
@@ -86,7 +90,8 @@ void k_vgastr_cursor_set(uint16_t x, uint16_t y) {
 
 void k_vgastr_cursor_refresh() {
   // update cursor position
-  uint16_t y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1 : k_vgastr_offset_row;
+  uint16_t y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1
+                                                    : k_vgastr_offset_row;
   k_vgastr_cursor_set(k_vgastr_offset_column, y);
   // update the next char color, or else we can see the cursor
   *(k_vgastr_offset_ptr + 1) = K_VGASTR_COLOR_LIGHT_GREY;
