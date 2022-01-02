@@ -25,7 +25,7 @@ welcome ()
 }
 
 void
-main ()
+k_main ()
 {
   welcome ();
 }

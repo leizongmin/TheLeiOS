@@ -1,2 +1,4 @@
 target remote localhost:1234
-symbol-file target/isofiles/boot/kernel.bin
+symbol-file target/kernel.elf
+break main.c:k_main
+continue
