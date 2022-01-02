@@ -28,7 +28,7 @@ else
 	override CFLAGS += -O0
 endif
 
-KERNEL_OBJS 	:= boot.o nostdlib.o main.o vgastr.o
+KERNEL_OBJS 	:= boot.o io.o nostdlib.o main.o vgastr.o
 KERNEL_ELF 	?= kernel.elf
 KERNEL_BIN 	?= kernel.bin
 

@@ -22,7 +22,14 @@ static inline void *k_memset(void *dest, u8 ch, size_t count) {
   return dest;
 }
 
-int k_strcmp(const char *s1, const char *s2);
+static inline int k_strcmp(const char *s1, const char *s2) {
+  const char *l = s1, *r = s2;
+  while (*l && (*l == *r)) {
+    l++;
+    r++;
+  }
+  return *l - *r;
+}
 
 usize k_i32_to_str(char *buf, usize buf_size, i32 num, i32 radix);
 

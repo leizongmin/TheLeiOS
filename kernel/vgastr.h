@@ -50,10 +50,10 @@ extern volatile u16 k_vgastr_offset_row;
 extern volatile u16 k_vgastr_offset_column;
 extern volatile u8 k_vgastr_color;
 
-void k_vgastr_clear(u8 color);
 void k_vgastr_fill(u8 color, char fill);
+static inline void k_vgastr_clear(u8 color) { k_vgastr_fill(color, 0); }
 void k_vgastr_next_row();
-void k_vgastr_set_color(u8 color);
+static inline void k_vgastr_set_color(u8 color) { k_vgastr_color = color; }
 void k_vgastr_write(char c);
 void k_vgastr_write_str(const char *s);
 void k_vgastr_printf(const char *fmt, ...);
