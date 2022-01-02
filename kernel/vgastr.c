@@ -93,6 +93,6 @@ void k_vgastr_cursor_refresh() {
   uint16_t y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1
                                                     : k_vgastr_offset_row;
   k_vgastr_cursor_set(k_vgastr_offset_column, y);
-  // update the next char color, or else we can see the cursor
+  // update the color of next char, or else we cannot see the cursor
   *(k_vgastr_offset_ptr + 1) = K_VGASTR_COLOR_LIGHT_GREY;
 }
