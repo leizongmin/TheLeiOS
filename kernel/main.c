@@ -1,3 +1,4 @@
+#include "nostdlib.h"
 #include "vgastr.h"
 
 void welcome() {
@@ -37,6 +38,10 @@ void welcome() {
   k_vgastr_write_string(" line 13------+\n");
   k_vgastr_write_string(" line 14\n");
   k_vgastr_write_string(" line 15\n");
+
+  if (k_strcmp("aa", "aa") == 0) {
+    k_vgastr_write_string("aa == aa");
+  }
 }
 
 __attribute__((unused)) void k_main() { welcome(); }
