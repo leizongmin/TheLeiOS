@@ -25,7 +25,7 @@ ifeq "$(BUILDTYPE)" "Release"
 	override OJCYFLAGS += -S
 	override CFLAGS += -Oz
 else
-	override CFLAGS += -O1
+	override CFLAGS += -O0
 endif
 
 KERNEL_OBJS 	:= boot.o main.o vgastr.o
