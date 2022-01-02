@@ -35,10 +35,10 @@
 #define K_VGASTR_COLOR_LIGHT_BROWN 14
 #define K_VGASTR_COLOR_WHITE 15
 
-extern char *k_vgastr_offset_ptr;
-extern u16 k_vgastr_offset_row;
-extern u16 k_vgastr_offset_column;
-extern u8 k_vgastr_color;
+extern volatile char *k_vgastr_offset_ptr;
+extern volatile u16 k_vgastr_offset_row;
+extern volatile u16 k_vgastr_offset_column;
+extern volatile u8 k_vgastr_color;
 
 void k_vgastr_clear();
 void k_vgastr_fill(u8 color, char fill);

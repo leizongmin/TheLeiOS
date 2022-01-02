@@ -2,10 +2,10 @@
 
 #include "nostdlib.h"
 
-char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
-u16 k_vgastr_offset_row = 0;
-u16 k_vgastr_offset_column = 0;
-u8 k_vgastr_color = K_VGASTR_COLOR_WHITE;
+volatile char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
+volatile u16 k_vgastr_offset_row = 0;
+volatile u16 k_vgastr_offset_column = 0;
+volatile u8 k_vgastr_color = K_VGASTR_COLOR_WHITE;
 
 void k_vgastr_clear() {
   k_memset((void *)K_VGASTR_START, 0, K_VGASTR_END - K_VGASTR_START);

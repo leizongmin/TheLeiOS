@@ -23,7 +23,7 @@ OJCYFLAGS 	?= -O binary
 ifeq "$(BUILDTYPE)" "Release"
 	override LDFLAGS += -s
 	override OJCYFLAGS += -S
-	override CFLAGS += -Oz
+	override CFLAGS += -Os
 else
 	override CFLAGS += -O0
 endif
