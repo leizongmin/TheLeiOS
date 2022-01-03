@@ -36,10 +36,16 @@ endif
 
 KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 			$(KERNEL_TARGET_DIR)/libk.o \
+			$(KERNEL_TARGET_DIR)/debug.o \
 			$(KERNEL_TARGET_DIR)/io.o \
 			$(KERNEL_TARGET_DIR)/vgastr.o \
 			$(KERNEL_TARGET_DIR)/vga.o \
 			$(KERNEL_TARGET_DIR)/cpuid.o \
+			$(KERNEL_TARGET_DIR)/cpu/idt.o \
+				$(KERNEL_TARGET_DIR)/cpu/isr.o \
+				$(KERNEL_TARGET_DIR)/cpu/ports.o \
+				$(KERNEL_TARGET_DIR)/cpu/timer.o \
+				$(KERNEL_TARGET_DIR)/cpu/interrupt.o \
 			$(KERNEL_TARGET_DIR)/main.o
 
 KERNEL_ELF 	?= $(KERNEL_TARGET_DIR)/kernel.elf
@@ -55,6 +61,7 @@ clean:
 
 directories:
 	mkdir -p $(KERNEL_TARGET_DIR)
+	mkdir -p $(KERNEL_TARGET_DIR)/cpu
 
 variables:
 	@printf "    BUILDTYPE          $(BUILDTYPE)\n"

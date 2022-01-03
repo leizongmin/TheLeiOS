@@ -92,4 +92,7 @@
 #define KB_ALT_INSERT (0X100 | 162)
 #define KB_ALT_DELETE (0X100 | 163)
 
+// FIXME
+static void init_keyboard() {}
+
 #endif  //_KERNEL_KEYBOARD_H_

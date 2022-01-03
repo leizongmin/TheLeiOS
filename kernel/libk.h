@@ -16,6 +16,18 @@
 #define f64 double
 #define usize size_t
 
+#define LOW_8(address) (uint8_t)((address)&0xFF)
+#define HIGH_8(address) (uint8_t)(((address) >> 8) & 0xFF)
+
+#define LOW_16(address) (uint16_t)((address)&0xFFFF)
+#define HIGH_16(address) (uint16_t)(((address) >> 16) & 0xFFFF)
+
+#define LOW_32(address) (uint32_t)((address)&0xFFFFFFFF)
+#define HIGH_32(address) (uint32_t)(((address) >> 32) & 0xFFFFFFFF)
+
+#define LOW_64(address) (uint64_t)((address)&0xFFFFFFFFFFFFFFFF)
+#define HIGH_64(address) (uint64_t)(((address) >> 64) & 0xFFFFFFFFFFFFFFFF)
+
 void *k_mem_copy(void *dest, const void *src, size_t count);
 void *k_mem_set(void *dest, u8 ch, size_t count);
 
