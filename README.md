@@ -67,3 +67,4 @@ apt install -y qemu-system-x86
 - [Booting into C](https://www.ics.uci.edu/~aburtsev/238P/hw/hw4-boot-into-c/hw4-boot-into-c.html)
 - [OS Development Tutorials](http://www.osdever.net/tutorials/index)
 - [OS Dev Tutorials](https://wiki.osdev.org/Tutorials)
+- [ghaiklor-os-gcc - Simple operating system with its own bootloader, drivers for screen and keyboard, libc (for educational purposes)](https://github.com/ghaiklor/ghaiklor-os-gcc)

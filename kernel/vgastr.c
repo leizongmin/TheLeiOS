@@ -3,7 +3,7 @@
 #include <stdarg.h>
 
 #include "io.h"
-#include "nostdlib.h"
+#include "libk.h"
 
 volatile char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
 volatile u16 k_vgastr_offset_row = 0;
@@ -29,10 +29,10 @@ void k_vgastr_next_row() {
 
   // if hit the bottom, scroll one line
   if (k_vgastr_offset_row >= K_VGASTR_ROWS) {
-    k_memcpy((void *)K_VGASTR_START,
-             (void *)K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW,
-             K_VGASTR_LAST_ROW_START - K_VGASTR_START);
-    k_memset((void *)(K_VGASTR_LAST_ROW_START), 0, K_VGASTR_OFFSET_PER_ROW);
+    k_mem_copy((void *)K_VGASTR_START,
+               (void *)K_VGASTR_START + K_VGASTR_OFFSET_PER_ROW,
+               K_VGASTR_LAST_ROW_START - K_VGASTR_START);
+    k_mem_set((void *)(K_VGASTR_LAST_ROW_START), 0, K_VGASTR_OFFSET_PER_ROW);
     k_vgastr_offset_row--;
   }
 

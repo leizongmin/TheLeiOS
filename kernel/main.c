@@ -33,7 +33,7 @@ void welcome() {
     DEBUG_INT(io_in8(0x3C0))
     io_out8(0x3C0, 0x41);
     DEBUG_INT(io_in8(0x3C0))
-    
+
     u8* vram = (u8*)0xa0000;
     //    DEBUG_DUMP_PTR(vram, 256)
     for (u32 x = 0; x < 100; x++) {

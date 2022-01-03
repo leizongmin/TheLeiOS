@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "types.h"
+#include "libk.h"
 
 #define IO_COM1 0x3F8
 #define IO_COM2 0x2F8

@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-#include "nostdlib.h"
+#include "libk.h"
 
 #define K_VGASTR_START 0xb8000
 #define K_VGASTR_END 0xb8fa0

@@ -5,6 +5,8 @@
 
 #include "vgastr.h"
 
+#define DEBUG_UNUSED(x) (void)(x)
+
 #ifdef NDEBUG
 
 #define DEBUG_ASSERT(msg, condition) ((void)0);
