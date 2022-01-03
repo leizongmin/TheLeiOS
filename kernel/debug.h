@@ -62,7 +62,7 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
   k_debug_int(__FUNCTION__, __FILE__, __LINE__, DEBUG_MESSAGE_DEBUG_PREFIX, n)
 #define DEBUG_PRINTF(fmt, ...)                                                 \
   DEBUG_KEEP_CURRENT_OUTPUT_STATUS(DEBUG_MESSAGE_DEBUG_COLOR, {                \
-    DEBUG_FUNCTION_WRITE_FORMAT("== %s ", DEBUG_MESSAGE_DEBUG_PREFIX);         \
+    DEBUG_FUNCTION_WRITE_FORMAT("== %s: ", DEBUG_MESSAGE_DEBUG_PREFIX);        \
     DEBUG_FUNCTION_WRITE_FORMAT(fmt, __VA_ARGS__);                             \
     DEBUG_FUNCTION_WRITE_FORMAT("\n== AT %s(%s:%d)\n", __FUNCTION__, __FILE__, \
                                 __LINE__);                                     \
@@ -77,7 +77,7 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
   k_debug_error(__FUNCTION__, __FILE__, __LINE__, DEBUG_MESSAGE_ERROR_PREFIX, s)
 #define DEBUG_ERRORF(fmt, ...)                                                 \
   DEBUG_KEEP_CURRENT_OUTPUT_STATUS(DEBUG_MESSAGE_ERROR_COLOR, {                \
-    DEBUG_FUNCTION_WRITE_FORMAT("== %s ", DEBUG_MESSAGE_ERROR_PREFIX);         \
+    DEBUG_FUNCTION_WRITE_FORMAT("== %s: ", DEBUG_MESSAGE_ERROR_PREFIX);        \
     DEBUG_FUNCTION_WRITE_FORMAT(fmt, __VA_ARGS__);                             \
     DEBUG_FUNCTION_WRITE_FORMAT("\n== AT %s(%s:%d)\n", __FUNCTION__, __FILE__, \
                                 __LINE__);                                     \
