@@ -10,6 +10,7 @@
 #define DEBUG_ASSERT(msg, condition) ((void)0);
 #define DEBUG_PRINTF(fmt, ...) ((void)0);
 #define DEBUG_STR(s) ((void)0);
+#define DEBUG_INT(n) ((void)0);
 #define DEBUG_DUMP_PTR(ptr, n) ((void)0);
 
 #else
@@ -20,7 +21,8 @@
     } else {                                                                  \
       u8 color = k_vgastr_color;                                              \
       k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN); \
-      k_vgastr_printf("\n== ASSERT FAILURE: [%s] AT %s(%s:%d) ==\n", msg,     \
+      if (k_vgastr_offset_column > 0) k_vgastr_write('\n');                   \
+      k_vgastr_printf("== ASSERT FAILURE: [%s] AT %s(%s:%d) ==\n", msg,       \
                       __FUNCTION__, __FILE__, __LINE__);                      \
       k_vgastr_set_color(color);                                              \
     }                                                                         \
@@ -30,8 +32,20 @@
   {                                                                          \
     u8 color = k_vgastr_color;                                               \
     k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN);  \
-    k_vgastr_write_str("\n== DEBUG: ");                                      \
+    if (k_vgastr_offset_column > 0) k_vgastr_write('\n');                    \
+    k_vgastr_write_str("== DEBUG: ");                                        \
     k_vgastr_write_str(s);                                                   \
+    k_vgastr_printf(" AT %s(%s:%d) ==\n", __FUNCTION__, __FILE__, __LINE__); \
+    k_vgastr_set_color(color);                                               \
+  }
+
+#define DEBUG_INT(n)                                                         \
+  {                                                                          \
+    u8 color = k_vgastr_color;                                               \
+    k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN);  \
+    if (k_vgastr_offset_column > 0) k_vgastr_write('\n');                    \
+    k_vgastr_write_str("== DEBUG: ");                                        \
+    k_vgastr_printf("0x%d", n);                                              \
     k_vgastr_printf(" AT %s(%s:%d) ==\n", __FUNCTION__, __FILE__, __LINE__); \
     k_vgastr_set_color(color);                                               \
   }
@@ -40,7 +54,8 @@
   {                                                                          \
     u8 color = k_vgastr_color;                                               \
     k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN);  \
-    k_vgastr_write_str("\n== DEBUG: ");                                      \
+    if (k_vgastr_offset_column > 0) k_vgastr_write('\n');                    \
+    k_vgastr_write_str("== DEBUG: ");                                        \
     k_vgastr_printf(fmt, __VA_ARGS__);                                       \
     k_vgastr_printf(" AT %s(%s:%d) ==\n", __FUNCTION__, __FILE__, __LINE__); \
     k_vgastr_set_color(color);                                               \
@@ -51,7 +66,8 @@
     u8* p = (u8*)ptr;                                                       \
     u8 color = k_vgastr_color;                                              \
     k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN); \
-    k_vgastr_printf("\n== DUMP DATA FROM POINTER [0x%x] AT %s(%s:%d) ==\n", \
+    if (k_vgastr_offset_column > 0) k_vgastr_write('\n');                   \
+    k_vgastr_printf("== DUMP DATA FROM POINTER [0x%x] AT %s(%s:%d) ==\n",   \
                     __FUNCTION__, __FILE__, __LINE__, p);                   \
     for (int i = 0; i < n; i++) {                                           \
       k_vgastr_printf("0x%x", *p++);                                        \

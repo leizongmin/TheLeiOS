@@ -39,6 +39,7 @@ KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 			$(KERNEL_TARGET_DIR)/nostdlib.o \
 			$(KERNEL_TARGET_DIR)/main.o \
 			$(KERNEL_TARGET_DIR)/vgastr.o \
+			$(KERNEL_TARGET_DIR)/vga.o \
 			$(KERNEL_TARGET_DIR)/cpuid.o
 
 KERNEL_ELF 	?= $(KERNEL_TARGET_DIR)/kernel.elf

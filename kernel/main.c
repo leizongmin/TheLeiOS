@@ -1,7 +1,6 @@
 #include "cpuid.h"
 #include "debug.h"
 #include "io.h"
-#include "nostdlib.h"
 #include "os.h"
 #include "vgastr.h"
 
@@ -29,6 +28,20 @@ void welcome() {
     io_out16(IO_COM1, 0x1234);
     DEBUG_STR("read COM1")
     DEBUG_PRINTF("u8=%x", io_in8(IO_COM1))
+  }
+  {
+    DEBUG_INT(io_in8(0x3C0))
+    io_out8(0x3C0, 0x41);
+    DEBUG_INT(io_in8(0x3C0))
+    
+    u8* vram = (u8*)0xa0000;
+    //    DEBUG_DUMP_PTR(vram, 256)
+    for (u32 x = 0; x < 100; x++) {
+      for (u32 y = 0; y < 200; y++) {
+        vram[y * 320 + x] = 10;
+      }
+    }
+    //    DEBUG_DUMP_PTR(vram, 256)
   }
 }
 
