@@ -70,23 +70,32 @@ void k_vgastr_write_str(const char *s) {
   k_vgastr_cursor_refresh();
 }
 
+// Get current cursor position
+// Implementation based on low-level port I/O
+// Write to CTRL register 14 (0xE) and read Hi byte
+// Write to CTRL register 15 (0xF) and read Lo byte
+// Adding these leads to current offset of cursor in memory
 u16 k_vgastr_cursor_get(u16 *x, u16 *y) {
-  io_out8(0x03d4, 14);
-  u8 cursor_pos_h = io_in8(0x03d5);
-  io_out8(0x03d4, 15);
-  u8 cursor_pos_l = io_in8(0x03d5);
+  io_out8(K_VGASTR_REG_SCREEN_CTRL, 14);
+  u8 cursor_pos_h = io_in8(K_VGASTR_REG_SCREEN_DATA);
+  io_out8(K_VGASTR_REG_SCREEN_CTRL, 15);
+  u8 cursor_pos_l = io_in8(K_VGASTR_REG_SCREEN_DATA);
   u16 pos = (u16)((cursor_pos_h << 8) | cursor_pos_l);
   *x = pos % 80;
   *y = pos / 80;
   return pos;
 }
 
+// Set cursor position
+// The same implementation as in get_cursor_offset()
+// Write to CTRL register 14 (0xE) and write Hi byte to DATA register
+// Write to CTRL register 15 (0xF) and write Lo byte to DATA register
 void k_vgastr_cursor_set(u16 x, u16 y) {
   u16 cursor_pos = (u16)(y * 80 + x);
-  io_out8(0x03d4, 14);
-  io_out8(0x03d5, (u8)((cursor_pos >> 8) & 0xff));
-  io_out8(0x03d4, 15);
-  io_out8(0x03d5, (u8)(cursor_pos & 0xff));
+  io_out8(K_VGASTR_REG_SCREEN_CTRL, 14);
+  io_out8(K_VGASTR_REG_SCREEN_DATA, (u8)((cursor_pos >> 8) & 0xff));
+  io_out8(K_VGASTR_REG_SCREEN_CTRL, 15);
+  io_out8(K_VGASTR_REG_SCREEN_DATA, (u8)(cursor_pos & 0xff));
 }
 
 void k_vgastr_cursor_refresh() {

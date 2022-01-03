@@ -11,6 +11,10 @@
 
 #include "libk.h"
 
+// Indexed registers for read\write from\in port
+#define K_VGASTR_REG_SCREEN_CTRL 0x3D4
+#define K_VGASTR_REG_SCREEN_DATA 0x3D5
+
 #define K_VGASTR_START 0xb8000
 #define K_VGASTR_END 0xb8fa0
 #define K_VGASTR_LAST_ROW_START 0xb8f00
