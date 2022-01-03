@@ -1,23 +1,29 @@
-BUILDTYPE 	?= Debug
-UNAME_S 	?= $(shell uname -s)
+BUILDTYPE 		?= Debug
+UNAME_S 		?= $(shell uname -s)
+CROSS_PREFIX 		?= x86_64-elf
 
-ASM		?= nasm
-CC		?= gcc
-LD		?= ld
-OBJCOPY		?= objcopy
-OBJDUMP		?= objdump
+KERNEL_TARGET_DIR 	?= $(CURDIR)/target
+
+ASM			?= nasm
+CC			?= gcc
+LD			?= ld
+OBJCOPY			?= objcopy
+OBJDUMP			?= objdump
 # use x86_64-elf-gcc on macOS
 ifeq "$(UNAME_S)" "Darwin"
-	override CC 		:= x86_64-elf-gcc
-	override LD 		:= x86_64-elf-ld
-	override OBJCOPY 	:= x86_64-elf-objcopy
-	override OBJDUMP 	:= x86_64-elf-objdump
+	override CC 		:= $(CROSS_PREFIX)-gcc
+	override LD 		:= $(CROSS_PREFIX)-ld
+	override OBJCOPY 	:= $(CROSS_PREFIX)-objcopy
+	override OBJDUMP 	:= $(CROSS_PREFIX)-objdump
 endif
 
-ASMBFLAGS 	?= -g -f elf -F dwarf
-CFLAGS 		?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding  -Wno-unused-parameter -Wunused-variable -Werror
-LDFLAGS 	?= -static -T kernel.lds -n -Map kernel.map
-OJCYFLAGS 	?= -O binary
+ASMBFLAGS 		?= -g -f elf -F dwarf
+CFLAGS 			?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
+				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
+				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
+				-Wno-unused-parameter -Wunused-variable -Werror
+LDFLAGS 		?= -static -T kernel.lds -n -Map kernel.map
+OJCYFLAGS 		?= -O binary
 
 # strip debug symbols
 ifeq "$(BUILDTYPE)" "Release"
@@ -28,32 +34,44 @@ else
 	override CFLAGS += -O0
 endif
 
-KERNEL_OBJS 	:= boot.o io.o nostdlib.o main.o vgastr.o cpuid.o
-KERNEL_ELF 	?= kernel.elf
-KERNEL_BIN 	?= kernel.bin
+KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
+			$(KERNEL_TARGET_DIR)/io.o \
+			$(KERNEL_TARGET_DIR)/nostdlib.o \
+			$(KERNEL_TARGET_DIR)/main.o \
+			$(KERNEL_TARGET_DIR)/vgastr.o \
+			$(KERNEL_TARGET_DIR)/cpuid.o
 
-.PHONY: build clean all link bin variables
+KERNEL_ELF 	?= $(KERNEL_TARGET_DIR)/kernel.elf
+KERNEL_BIN 	?= $(KERNEL_TARGET_DIR)/kernel.bin
 
-all: clean build link bin
+.PHONY: build clean directories all link bin variables
+
+all: clean directories build link bin
 
 clean:
-	$(RM) -f *.o *.bin *.elf *.map
+	rm -f *.o *.bin *.elf *.map
+	mkdir -p "$(KERNEL_TARGET_DIR)" && cd "$(KERNEL_TARGET_DIR)" && rm -f *.o *.bin *.elf *.map
+
+directories:
+	mkdir -p $(KERNEL_TARGET_DIR)
 
 variables:
-	@printf "    BUILDTYPE        $(BUILDTYPE)\n"
-	@printf "    UNAME_S          $(UNAME_S)\n"
-	@printf "    ASM              $(ASM)\n"
-	@printf "    CC               $(CC)\n"
-	@printf "    LD               $(LD)\n"
-	@printf "    OBJCOPY          $(OBJCOPY)\n"
-	@printf "    OBJDUMP          $(OBJDUMP)\n"
-	@printf "    ASMBFLAGS        $(ASMBFLAGS)\n"
-	@printf "    CFLAGS           $(CFLAGS)\n"
-	@printf "    LDFLAGS          $(LDFLAGS)\n"
-	@printf "    OJCYFLAGS        $(OJCYFLAGS)\n"
-	@printf "    KERNEL_OBJS      $(KERNEL_OBJS)\n"
-	@printf "    KERNEL_ELF       $(KERNEL_ELF)\n"
-	@printf "    KERNEL_BIN       $(KERNEL_BIN)\n"
+	@printf "    BUILDTYPE          $(BUILDTYPE)\n"
+	@printf "    UNAME_S            $(UNAME_S)\n"
+	@printf "    CROSS_PREFIX       $(CROSS_PREFIX)\n"
+	@printf "    ASM                $(ASM)\n"
+	@printf "    CC                 $(CC)\n"
+	@printf "    LD                 $(LD)\n"
+	@printf "    OBJCOPY            $(OBJCOPY)\n"
+	@printf "    OBJDUMP            $(OBJDUMP)\n"
+	@printf "    ASMBFLAGS          $(ASMBFLAGS)\n"
+	@printf "    CFLAGS             $(CFLAGS)\n"
+	@printf "    LDFLAGS            $(LDFLAGS)\n"
+	@printf "    OJCYFLAGS          $(OJCYFLAGS)\n"
+	@printf "    KERNEL_OBJS        $(KERNEL_OBJS)\n"
+	@printf "    KERNEL_ELF         $(KERNEL_ELF)\n"
+	@printf "    KERNEL_BIN         $(KERNEL_BIN)\n"
+	@printf "    KERNEL_TARGET_DIR  $(KERNEL_TARGET_DIR)\n"
 
 build: $(KERNEL_OBJS)
 
@@ -65,7 +83,7 @@ bin: $(KERNEL_BIN)
 $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OJCYFLAGS) $< $@
 
-%.o : %.asm
+$(KERNEL_TARGET_DIR)/%.o : %.asm
 	$(ASM) $(ASMBFLAGS) -o $@ $<
-%.o : %.c
+$(KERNEL_TARGET_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -o $@ $<

@@ -2,8 +2,9 @@
 
 BUILDTYPE 		?= Debug
 UNAME_S 		?= $(shell uname -s)
-KERNEL_DIR 		?= $(CURDIR)/kernel
 TARGET_DIR 		?= $(CURDIR)/target
+KERNEL_DIR 		?= $(CURDIR)/kernel
+KERNEL_TARGET_DIR 	?= $(TARGET_DIR)/kernel
 DOCKER_IMAGE 		?= leios-build
 ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 KERNEL_BIN_FILE 	?= $(TARGET_DIR)/kernel.bin
@@ -26,7 +27,7 @@ endif
 all: clean kernel
 
 clean:
-	$(MAKE) -C "$(KERNEL_DIR)" clean BUILDTYPE=$(BUILDTYPE)
+	$(MAKE) -C "$(KERNEL_DIR)" clean BUILDTYPE=$(BUILDTYPE) KERNEL_TARGET_DIR=$(KERNEL_TARGET_DIR)
 	rm -rf "$(TARGET_DIR)"
 
 init:
@@ -40,44 +41,45 @@ help:
 	@printf "\n"
 	@printf "Usage:\n"
 	@printf "\n"
-	@printf "    init             Initiate the current build environment \n"
-	@printf "    kernel           Build the OS kernel\n"
-	@printf "    iso              Build the bootable iso file\n"
-	@printf "    docker-image     Make docker image of builder (for none Linux system)\n"
-	@printf "    docker           Build on docker container (for none Linux system)\n"
-	@printf "    docker-bash      Enter the docker container to manual build (for none Linux system)\n"
-	@printf "    run-iso          Run on the QEMU simulator via iso file\n"
-	@printf "    run-kernel       Run on the QEMU simulator via bin file\n"
-	@printf "    gdb              Start GDB remote debugging\n"
+	@printf "    init               Initiate the current build environment \n"
+	@printf "    kernel             Build the OS kernel\n"
+	@printf "    iso                Build the bootable iso file\n"
+	@printf "    docker-image       Make docker image of builder (for none Linux system)\n"
+	@printf "    docker             Build on docker container (for none Linux system)\n"
+	@printf "    docker-bash        Enter the docker container to manual build (for none Linux system)\n"
+	@printf "    run-iso            Run on the QEMU simulator via iso file\n"
+	@printf "    run-kernel         Run on the QEMU simulator via bin file\n"
+	@printf "    gdb                Start GDB remote debugging\n"
 	@printf "\n"
 	@printf "\n"
 	@printf "Variables:\n"
 	@printf "\n"
-	@printf "    BUILDTYPE        $(BUILDTYPE)\n"
-	@printf "    CC               $(CC)\n"
-	@printf "    UNAME_S          $(UNAME_S)\n"
-	@printf "    KERNEL_DIR       $(KERNEL_DIR)\n"
-	@printf "    TARGET_DIR       $(TARGET_DIR)\n"
-	@printf "    DOCKER_IMAGE     $(DOCKER_IMAGE)\n"
-	@printf "    ISO_FILE         $(ISO_FILE)\n"
-	@printf "    KERNEL_BIN_FILE  $(KERNEL_BIN_FILE)\n"
-	@printf "    KERNEL_ELF_FILE  $(KERNEL_ELF_FILE)\n"
-	@printf "    DOCKER           $(DOCKER)\n"
-	@printf "    QEMU             $(QEMU)\n"
-	@printf "    QEMU_FLAGS       $(QEMU_FLAGS)\n"
-	@printf "    DEBUG            $(DEBUG)\n"
-	@printf "    CONTAINER_NAME   $(CONTAINER_NAME)\n"
+	@printf "    BUILDTYPE          $(BUILDTYPE)\n"
+	@printf "    CC                 $(CC)\n"
+	@printf "    UNAME_S            $(UNAME_S)\n"
+	@printf "    KERNEL_DIR         $(KERNEL_DIR)\n"
+	@printf "    KERNEL_TARGET_DIR  $(KERNEL_TARGET_DIR)\n"
+	@printf "    TARGET_DIR         $(TARGET_DIR)\n"
+	@printf "    DOCKER_IMAGE       $(DOCKER_IMAGE)\n"
+	@printf "    ISO_FILE           $(ISO_FILE)\n"
+	@printf "    KERNEL_BIN_FILE    $(KERNEL_BIN_FILE)\n"
+	@printf "    KERNEL_ELF_FILE    $(KERNEL_ELF_FILE)\n"
+	@printf "    DOCKER             $(DOCKER)\n"
+	@printf "    QEMU               $(QEMU)\n"
+	@printf "    QEMU_FLAGS         $(QEMU_FLAGS)\n"
+	@printf "    DEBUG              $(DEBUG)\n"
+	@printf "    CONTAINER_NAME     $(CONTAINER_NAME)\n"
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"
-	@$(MAKE) -C "$(KERNEL_DIR)" variables BUILDTYPE=$(BUILDTYPE)
+	@$(MAKE) -C "$(KERNEL_DIR)" variables BUILDTYPE=$(BUILDTYPE) KERNEL_TARGET_DIR=$(KERNEL_TARGET_DIR)
 	@printf "\n"
 
 kernel:
-	$(MAKE) -C "$(KERNEL_DIR)" BUILDTYPE=$(BUILDTYPE)
+	$(MAKE) -C "$(KERNEL_DIR)" BUILDTYPE=$(BUILDTYPE) KERNEL_TARGET_DIR=$(KERNEL_TARGET_DIR)
 	mkdir -p $(TARGET_DIR)
-	cp "$(KERNEL_DIR)/kernel.elf" "$(KERNEL_ELF_FILE)"
-	cp "$(KERNEL_DIR)/kernel.bin" "$(KERNEL_BIN_FILE)"
+	cp "$(KERNEL_TARGET_DIR)/kernel.elf" "$(KERNEL_ELF_FILE)"
+	cp "$(KERNEL_TARGET_DIR)/kernel.bin" "$(KERNEL_BIN_FILE)"
 
 iso: kernel
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
