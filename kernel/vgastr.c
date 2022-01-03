@@ -70,20 +70,23 @@ void k_vgastr_write_str(const char *s) {
   k_vgastr_cursor_refresh();
 }
 
-u16 k_vgastr_cursor_get() {
-  k_outb(0x03d4, 14);
-  u8 cursor_pos_h = k_inb(0x03d5);
-  k_outb(0x03d4, 15);
-  u8 cursor_pos_l = k_inb(0x03d5);
-  return (u16)((cursor_pos_h << 8) | cursor_pos_l);
+u16 k_vgastr_cursor_get(u16 *x, u16 *y) {
+  io_outb(0x03d4, 14);
+  u8 cursor_pos_h = io_inb(0x03d5);
+  io_outb(0x03d4, 15);
+  u8 cursor_pos_l = io_inb(0x03d5);
+  u16 pos = (u16)((cursor_pos_h << 8) | cursor_pos_l);
+  *x = pos % 80;
+  *y = pos / 80;
+  return pos;
 }
 
 void k_vgastr_cursor_set(u16 x, u16 y) {
   u16 cursor_pos = (u16)(y * 80 + x);
-  k_outb(0x03d4, 14);
-  k_outb(0x03d5, (u8)((cursor_pos >> 8) & 0xff));
-  k_outb(0x03d4, 15);
-  k_outb(0x03d5, (u8)(cursor_pos & 0xff));
+  io_outb(0x03d4, 14);
+  io_outb(0x03d5, (u8)((cursor_pos >> 8) & 0xff));
+  io_outb(0x03d4, 15);
+  io_outb(0x03d5, (u8)(cursor_pos & 0xff));
 }
 
 void k_vgastr_cursor_refresh() {
@@ -91,8 +94,10 @@ void k_vgastr_cursor_refresh() {
   u16 y = k_vgastr_offset_row >= K_VGASTR_ROWS ? K_VGASTR_ROWS - 1
                                                : k_vgastr_offset_row;
   k_vgastr_cursor_set(k_vgastr_offset_column, y);
-  // update the color of next char, or else we cannot see the cursor
-  *(k_vgastr_offset_ptr + 1) = K_VGASTR_COLOR_LIGHT_GREY;
+  // update the color of next char, or else we cannot see the cursor,
+  // and we need to keep the current background color
+  u8 color = K_VGASTR_COLOR_LIGHT_GREY + (k_vgastr_color & 0xF0);
+  *(k_vgastr_offset_ptr + 1) = (char)color;
 }
 
 void k_vgastr_printf(const char *fmt, ...) {

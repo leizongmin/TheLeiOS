@@ -23,12 +23,12 @@ OJCYFLAGS 	?= -O binary
 ifeq "$(BUILDTYPE)" "Release"
 	override LDFLAGS += -s
 	override OJCYFLAGS += -S
-	override CFLAGS += -Os
+	override CFLAGS += -Os -DNDEBUG
 else
 	override CFLAGS += -O0
 endif
 
-KERNEL_OBJS 	:= boot.o io.o nostdlib.o main.o vgastr.o
+KERNEL_OBJS 	:= boot.o io.o nostdlib.o main.o vgastr.o cpuid.o
 KERNEL_ELF 	?= kernel.elf
 KERNEL_BIN 	?= kernel.bin
 

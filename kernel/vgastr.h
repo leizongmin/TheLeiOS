@@ -58,7 +58,7 @@ void k_vgastr_write(char c);
 void k_vgastr_write_str(const char *s);
 void k_vgastr_printf(const char *fmt, ...);
 
-u16 k_vgastr_cursor_get();
+u16 k_vgastr_cursor_get(u16 *x, u16 *y);
 void k_vgastr_cursor_set(u16 x, u16 y);
 void k_vgastr_cursor_refresh();
 
