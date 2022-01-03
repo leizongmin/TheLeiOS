@@ -1,18 +1,48 @@
 #ifndef _KERNEL_DEBUG_H_
 #define _KERNEL_DEBUG_H_
 
-#include <stdbool.h>
+#include "libk.h"
 
-#include "vgastr.h"
+#define DEBUG_UNUSED(x) (void)(x)
 
 // if there are many debug output place,
 // define the function and variable name here
+#define DEBUG_OUTPUT_TO_VGA
+#ifdef DEBUG_OUTPUT_TO_VGA
+
+#include "vgastr.h"
+
 #define DEBUG_FUNCTION_WRITE_CHAR(c) k_vgastr_write(c)
 #define DEBUG_FUNCTION_WRITE_STR(s) k_vgastr_write_str(s)
 #define DEBUG_FUNCTION_WRITE_FORMAT(fmt, ...) k_vgastr_printf(fmt, __VA_ARGS__)
 #define DEBUG_FUNCTION_COLOR k_vgastr_color
 #define DEBUG_FUNCTION_COLOR_SET(c) k_vgastr_set_color(c)
 #define DEBUG_FUNCTION_OFFSET_COLUMN k_vgastr_offset_column
+
+#else
+
+#include "io.h"
+#include "vgastr.h"
+
+#define DEBUG_FUNCTION_WRITE_CHAR(c) io_out8(IO_COM1, c)
+#define DEBUG_FUNCTION_WRITE_STR(s) \
+  u8* _p = (u8*)s;                  \
+  for (; *_p; _p++) {               \
+    io_out8(IO_COM1, *_p);          \
+  }
+#define DEBUG_FUNCTION_WRITE_FORMAT(fmt, ...)    \
+  {                                              \
+    const usize _size = 1024;                    \
+    char _buf[_size];                            \
+    _buf[0] = '\0';                              \
+    k_str_printf(_buf, _size, fmt, __VA_ARGS__); \
+    DEBUG_FUNCTION_WRITE_STR(_buf);              \
+  }
+#define DEBUG_FUNCTION_COLOR 0
+#define DEBUG_FUNCTION_COLOR_SET(c) (void)(0)
+#define DEBUG_FUNCTION_OFFSET_COLUMN 1
+
+#endif  // DEBUG_OUTPUT_TO_VGA
 
 void k_debug_assert(const char* _func, const char* _file, usize line,
                     const char* msg, bool condition);
@@ -35,13 +65,14 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
 
 #define DEBUG_KEEP_CURRENT_OUTPUT_STATUS(c, x) \
   {                                            \
-    u8 color = DEBUG_FUNCTION_COLOR;           \
+    u8 _color = DEBUG_FUNCTION_COLOR;          \
+    DEBUG_UNUSED(_color);                      \
     DEBUG_FUNCTION_COLOR_SET(c);               \
     if (DEBUG_FUNCTION_OFFSET_COLUMN > 0) {    \
       DEBUG_FUNCTION_WRITE_CHAR('\n');         \
     }                                          \
     x;                                         \
-    DEBUG_FUNCTION_COLOR_SET(color);           \
+    DEBUG_FUNCTION_COLOR_SET(_color);          \
   }
 
 #ifdef NDEBUG
@@ -72,7 +103,6 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
 
 #endif  // NDEBUG
 
-#define DEBUG_UNUSED(x) (void)(x)
 #define DEBUG_ERROR(s) \
   k_debug_error(__FUNCTION__, __FILE__, __LINE__, DEBUG_MESSAGE_ERROR_PREFIX, s)
 #define DEBUG_ERRORF(fmt, ...)                                                 \

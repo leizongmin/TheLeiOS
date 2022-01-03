@@ -1,8 +1,6 @@
 #ifndef _KERNEL_IO_H_
 #define _KERNEL_IO_H_
 
-#include <stdbool.h>
-
 #include "libk.h"
 
 #define IO_COM1 0x3F8

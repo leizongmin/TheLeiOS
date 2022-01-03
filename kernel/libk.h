@@ -1,6 +1,8 @@
 #ifndef _KERNEL_LIBK_H_
 #define _KERNEL_LIBK_H_
 
+#include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -28,15 +30,17 @@
 #define LOW_64(address) (uint64_t)((address)&0xFFFFFFFFFFFFFFFF)
 #define HIGH_64(address) (uint64_t)(((address) >> 64) & 0xFFFFFFFFFFFFFFFF)
 
-void *k_mem_copy(void *dest, const void *src, size_t count);
-void *k_mem_set(void *dest, u8 ch, size_t count);
+void *k_mem_copy(void *restrict dest, const void *restrict src, usize count);
+void *k_mem_set(void *dest, u8 ch, usize count);
 
-int k_str_cmp(const char *s1, const char *s2);
+int k_str_cmp(const char *restrict s1, const char *restrict s2);
 void k_str_reverse(char *s);
 usize k_str_len(const char *s);
 void k_str_append(char *s, char n);
+usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2);
 void k_str_backspace(char *s);
-
+usize k_str_printf(char *restrict buffer, usize bufsz,
+                   const char *restrict format, ...);
 usize k_i32_to_str(char *buf, usize buf_size, i32 num, i32 radix);
 
 #endif  //_KERNEL_LIBK_H_

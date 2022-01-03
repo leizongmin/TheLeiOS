@@ -1,7 +1,5 @@
 #include "vgastr.h"
 
-#include <stdarg.h>
-
 #include "io.h"
 #include "libk.h"
 
@@ -114,6 +112,7 @@ void k_vgastr_printf(const char *fmt, ...) {
   va_start(args, fmt);
   const usize buf_size = 1024;
   char buf[buf_size];
+  buf[0] = '\0';
   while (*fmt) {
     if (*fmt == '%') {
       switch (*(fmt + 1)) {

@@ -1,6 +1,8 @@
 #include "libk.h"
 
-void *k_mem_copy(void *dest, const void *src, size_t count) {
+#include "debug.h"
+
+void *k_mem_copy(void *restrict dest, const void *restrict src, usize count) {
   u8 *d = dest;
   const u8 *s = src;
   while (count--) {
@@ -9,7 +11,7 @@ void *k_mem_copy(void *dest, const void *src, size_t count) {
   return dest;
 }
 
-void *k_mem_set(void *dest, u8 ch, size_t count) {
+void *k_mem_set(void *dest, u8 ch, usize count) {
   u8 *d = dest;
   while (count--) {
     *d++ = ch;
@@ -17,7 +19,7 @@ void *k_mem_set(void *dest, u8 ch, size_t count) {
   return dest;
 }
 
-int k_str_cmp(const char *s1, const char *s2) {
+int k_str_cmp(const char *restrict s1, const char *restrict s2) {
   const char *l = s1, *r = s2;
   while (*l && (*l == *r)) {
     l++;
@@ -51,6 +53,81 @@ void k_str_append(char *s, char n) {
 void k_str_backspace(char *s) {
   usize len = k_str_len(s);
   s[len - 1] = '\0';
+}
+
+usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2) {
+  //  DEBUG_PRINTF("s=%s sz=%d s2=%s", s, sz, s2);
+  usize len = k_str_len(s);
+  usize i = len;
+  for (; i < sz && *s2; i++) {
+    *(s + i) = *s2++;
+  }
+  if (i >= sz) {
+    *(s + sz - 1) = '\0';
+  } else {
+    *(s + i) = '\0';
+  }
+  return i - len;
+}
+
+usize k_str_printf(char *restrict buffer, usize bufsz,
+                   const char *restrict format, ...) {
+  va_list args;
+  va_start(args, format);
+
+  const usize value_buf_size = 1024;
+  char value_buf[value_buf_size];
+  value_buf[0] = '\0';
+  usize buffer_index = 0;
+
+  while (*format && buffer_index < bufsz) {
+    if (*format == '%') {
+      switch (*(format + 1)) {
+        case 'c':  // char
+          buffer[buffer_index++] = (char)va_arg(args, int);
+          break;
+        case 's':  // string
+          buffer_index += k_str_append_str(buffer, bufsz, va_arg(args, char *));
+          break;
+        case 'b':  // binary
+          k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 2);
+          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          break;
+        case 'o':  // octonary
+          k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 8);
+          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          break;
+        case 'd':  // decimal
+          k_i32_to_str(value_buf, value_buf_size, va_arg(args, i32), 10);
+          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          break;
+        case 'x':  // hexadecimal
+          k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 16);
+          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          break;
+        case '%':  // %
+          buffer[buffer_index++] = *format;
+          break;
+        default:  // not support
+          buffer[buffer_index++] = *format;
+          break;
+      }
+      format += 2;
+    } else {
+      buffer[buffer_index++] = *format;
+      format++;
+    }
+  }
+
+  va_end(args);
+
+  if (buffer_index < bufsz) {
+    buffer[buffer_index] = '\0';
+  } else {
+    buffer[bufsz - 1] = '\0';
+  }
+
+  return buffer_index;
 }
 
 // radix must be between 2 and 36

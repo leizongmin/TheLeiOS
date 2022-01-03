@@ -7,8 +7,6 @@
  * ASCII Table: https://www.asciitable.com/
  */
 
-#include <stdint.h>
-
 #include "libk.h"
 
 // Indexed registers for read\write from\in port
