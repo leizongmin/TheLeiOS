@@ -9,6 +9,7 @@
 
 #define DEBUG_ASSERT(msg, condition) ((void)0);
 #define DEBUG_PRINTF(fmt, ...) ((void)0);
+#define DEBUG_STR(s) ((void)0);
 #define DEBUG_DUMP_PTR(ptr, n) ((void)0);
 
 #else
@@ -23,6 +24,16 @@
                       __FUNCTION__, __FILE__, __LINE__);                      \
       k_vgastr_set_color(color);                                              \
     }                                                                         \
+  }
+
+#define DEBUG_STR(s)                                                         \
+  {                                                                          \
+    u8 color = k_vgastr_color;                                               \
+    k_vgastr_set_color(K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN);  \
+    k_vgastr_write_str("\n== DEBUG: ");                                      \
+    k_vgastr_write_str(s);                                                   \
+    k_vgastr_printf(" AT %s(%s:%d) ==\n", __FUNCTION__, __FILE__, __LINE__); \
+    k_vgastr_set_color(color);                                               \
   }
 
 #define DEBUG_PRINTF(fmt, ...)                                               \

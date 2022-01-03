@@ -5,6 +5,11 @@
 
 #include "types.h"
 
+#define IO_COM1 0x3F8
+#define IO_COM2 0x2F8
+#define IO_COM3 0x3E8
+#define IO_COM4 0x2E8
+
 /* Read a 8/16/32-bit value at a given memory location using another segment
  than the default C data segment. Unfortunately there is no constraint for
  manipulating segment registers directly, so issuing the mov <reg>,
@@ -37,12 +42,34 @@ static inline void io_farpokeb(u16 sel, void* off, u8 v) {
   /* TODO: Should "memory" be in the clobber list here? */
 }
 
-static inline void io_halt(void) { __asm__ volatile("hlt" : :); }
+static inline void io_hlt(void) { __asm__ volatile("hlt" : :); }
+
+static inline void io_cli() { __asm__ volatile("cli" ::); }
+
+static inline void io_sti() { __asm__ volatile("sti" ::); }
+
+static inline void io_stihlt() {
+  __asm__ volatile(
+      "sti\n\t"
+      "hlt");
+}
 
 /* Receives a 8/16/32-bit value from an I/O location. Traditional names are inb,
- inw and inl respectively. */
-static inline u8 io_inb(u16 port) {
+inw and inl respectively. */
+static inline u8 io_in8(u16 port) {
   u8 data;
+  __asm__ volatile("inb %%dx,%%al" : "=a"(data) : "d"(port));
+  return data;
+}
+
+static inline u16 io_in16(u16 port) {
+  u16 data;
+  __asm__ volatile("inb %%dx,%%al" : "=a"(data) : "d"(port));
+  return data;
+}
+
+static inline u32 io_in32(u16 port) {
+  u32 data;
   __asm__ volatile("inb %%dx,%%al" : "=a"(data) : "d"(port));
   return data;
 }
@@ -52,7 +79,15 @@ static inline u8 io_inb(u16 port) {
  register before the asm command is issued and Nd allows for one-byte constant
  values to be assembled as constants, freeing the edx register for other
  cases. */
-static inline void io_outb(u16 port, u8 data) {
+static inline void io_out8(u16 port, u8 data) {
+  __asm__ volatile("outb %%al,%%dx" : : "a"(data), "d"(port));
+}
+
+static inline void io_out16(u16 port, u16 data) {
+  __asm__ volatile("outb %%al,%%dx" : : "a"(data), "d"(port));
+}
+
+static inline void io_out32(u16 port, u32 data) {
   __asm__ volatile("outb %%al,%%dx" : : "a"(data), "d"(port));
 }
 
@@ -64,7 +99,7 @@ You can do an IO operation on any unused port: the Linux kernel by default uses
 port 0x80, which is often used during POST to log information on the
 motherboard's hex display but almost always unused after boot.
  From https://wiki.osdev.org/Inline_Assembly/Examples */
-static inline void io_wait(void) { io_outb(0x80, 0); }
+static inline void io_wait(void) { io_out8(0x80, 0); }
 
 /* Returns a true boolean value if irq are enabled for the CPU.
 From https://wiki.osdev.org/Inline_Assembly/Examples*/
@@ -196,8 +231,8 @@ From https://wiki.osdev.org/Inline_Assembly/Examples */
 // End of Interrupt
 #define PIC_EOI 0x20 /* End-of-interrupt command code */
 // void PIC_sendEOI(u8 irq) {
-//   if (irq >= 8) io_outb(PIC2_COMMAND, PIC_EOI);
-//   io_outb(PIC1_COMMAND, PIC_EOI);
+//   if (irq >= 8) io_out8(PIC2_COMMAND, PIC_EOI);
+//   io_out8(PIC1_COMMAND, PIC_EOI);
 // }
 
 // Initialisation
@@ -223,36 +258,36 @@ arguments:
 // void PIC_remap(i32 offset1, i32 offset2) {
 //   u8 a1, a2;
 //
-//   a1 = io_inb(PIC1_DATA);  // save masks
-//   a2 = io_inb(PIC2_DATA);
+//   a1 = io_in8(PIC1_DATA);  // save masks
+//   a2 = io_in8(PIC2_DATA);
 //
-//   io_outb(
+//   io_out8(
 //       PIC1_COMMAND,
 //       ICW1_INIT |
 //           ICW1_ICW4);  // starts the initialization sequence (in cascade
 //           mode)
 //   io_wait();
-//   io_outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
+//   io_out8(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
 //   io_wait();
-//   io_outb(PIC1_DATA, offset1);  // ICW2: Master PIC vector offset
+//   io_out8(PIC1_DATA, offset1);  // ICW2: Master PIC vector offset
 //   io_wait();
-//   io_outb(PIC2_DATA, offset2);  // ICW2: Slave PIC vector offset
+//   io_out8(PIC2_DATA, offset2);  // ICW2: Slave PIC vector offset
 //   io_wait();
-//   io_outb(PIC1_DATA, 4);  // ICW3: tell Master PIC that there is a slave PIC
+//   io_out8(PIC1_DATA, 4);  // ICW3: tell Master PIC that there is a slave PIC
 //   at
 //                           // IRQ2 (0000 0100)
 //   io_wait();
-//   io_outb(PIC2_DATA,
+//   io_out8(PIC2_DATA,
 //           2);  // ICW3: tell Slave PIC its cascade identity (0000 0010)
 //   io_wait();
 //
-//   io_outb(PIC1_DATA, ICW4_8086);
+//   io_out8(PIC1_DATA, ICW4_8086);
 //   io_wait();
-//   io_outb(PIC2_DATA, ICW4_8086);
+//   io_out8(PIC2_DATA, ICW4_8086);
 //   io_wait();
 //
-//   io_outb(PIC1_DATA, a1);  // restore saved masks.
-//   io_outb(PIC2_DATA, a2);
+//   io_out8(PIC1_DATA, a1);  // restore saved masks.
+//   io_out8(PIC2_DATA, a2);
 // }
 //
 //// Masking
@@ -266,8 +301,8 @@ arguments:
 //     port = PIC2_DATA;
 //     IRQline -= 8;
 //   }
-//   value = io_inb(port) | (1 << IRQline);
-//   io_outb(port, value);
+//   value = io_in8(port) | (1 << IRQline);
+//   io_out8(port, value);
 // }
 //
 // void IRQ_clear_mask(unsigned char IRQline) {
@@ -280,8 +315,8 @@ arguments:
 //     port = PIC2_DATA;
 //     IRQline -= 8;
 //   }
-//   value = io_inb(port) & ~(1 << IRQline);
-//   io_outb(port, value);
+//   value = io_in8(port) & ~(1 << IRQline);
+//   io_out8(port, value);
 // }
 
 #endif  //_KERNEL_IO_H_

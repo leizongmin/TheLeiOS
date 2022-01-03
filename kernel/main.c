@@ -24,6 +24,12 @@ void welcome() {
     k_vgastr_printf("detect cpuid: %s\n", id);
     DEBUG_DUMP_PTR((u8*)id, 12)
   }
+  {
+    io_out8(IO_COM1, 0x56);
+    io_out16(IO_COM1, 0x1234);
+    DEBUG_STR("read COM1")
+    DEBUG_PRINTF("u8=%x", io_in8(IO_COM1))
+  }
 }
 
 __attribute__((unused)) void k_main() { welcome(); }
