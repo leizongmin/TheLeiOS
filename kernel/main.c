@@ -1,8 +1,12 @@
+#include "cpu/idt.h"
 #include "cpuid.h"
 #include "debug.h"
 #include "io.h"
 #include "os.h"
 #include "vgastr.h"
+
+idt_gate_t idt[IDT_ENTRIES];
+idt_register_t idt_reg;
 
 void welcome() {
   k_vgastr_clear(K_VGASTR_BGCOLOR_BLUE);
