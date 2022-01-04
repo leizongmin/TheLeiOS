@@ -3,9 +3,9 @@
 
 #include "isr.h"
 
-#include "../debug.h"
-#include "../keyboard.h"
 #include "idt.h"
+#include "keyboard.h"
+#include "libk/debug.h"
 #include "ports.h"
 #include "timer.h"
 

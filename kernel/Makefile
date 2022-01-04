@@ -37,7 +37,7 @@ endif
 
 KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 			$(KERNEL_TARGET_DIR)/libk/libk.o \
-			$(KERNEL_TARGET_DIR)/debug.o \
+				$(KERNEL_TARGET_DIR)/libk/debug.o \
 			$(KERNEL_TARGET_DIR)/io.o \
 			$(KERNEL_TARGET_DIR)/vgastr.o \
 			$(KERNEL_TARGET_DIR)/vga.o \

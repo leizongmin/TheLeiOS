@@ -1,7 +1,7 @@
 #include "cpu/idt.h"
 #include "cpuid.h"
-#include "debug.h"
 #include "io.h"
+#include "libk/debug.h"
 #include "os.h"
 #include "vgastr.h"
 

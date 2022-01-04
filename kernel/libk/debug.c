@@ -1,4 +1,4 @@
-#include "debug.h"
+#include "libk/debug.h"
 
 #include "libk/libk.h"
 

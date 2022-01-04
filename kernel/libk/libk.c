@@ -1,6 +1,6 @@
-#include "libk.h"
+#include "libk/libk.h"
 
-#include "debug.h"
+#include "libk/debug.h"
 
 void *k_mem_copy(void *restrict dest, const void *restrict src, usize count) {
   u8 *d = dest;

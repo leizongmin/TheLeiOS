@@ -1,6 +1,6 @@
 #include "cpuid.h"
 
-#include "debug.h"
+#include "libk/debug.h"
 
 i32 k_cpuid_str(i32 code, char buf[13]) {
   u32 eax, ebx, ecx, edx;
