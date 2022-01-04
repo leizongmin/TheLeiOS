@@ -38,6 +38,8 @@ void k_str_reverse(char *s);
 usize k_str_len(const char *s);
 void k_str_append(char *s, char n);
 usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2);
+usize k_str_append_str_at(char *restrict s, usize sz, const char *restrict s2,
+                          usize offset);
 void k_str_backspace(char *s);
 usize k_str_printf(char *restrict buffer, usize bufsz,
                    const char *restrict format, ...);

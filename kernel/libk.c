@@ -56,9 +56,13 @@ void k_str_backspace(char *s) {
 }
 
 usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2) {
-  //  DEBUG_PRINTF("s=%s sz=%d s2=%s", s, sz, s2);
   usize len = k_str_len(s);
-  usize i = len;
+  return k_str_append_str_at(s, sz, s2, len);
+}
+
+usize k_str_append_str_at(char *restrict s, usize sz, const char *restrict s2,
+                          usize offset) {
+  usize i = offset;
   for (; i < sz && *s2; i++) {
     *(s + i) = *s2++;
   }
@@ -67,7 +71,7 @@ usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2) {
   } else {
     *(s + i) = '\0';
   }
-  return i - len;
+  return i - offset;
 }
 
 usize k_str_printf(char *restrict buffer, usize bufsz,
@@ -77,7 +81,6 @@ usize k_str_printf(char *restrict buffer, usize bufsz,
 
   const usize value_buf_size = 1024;
   char value_buf[value_buf_size];
-  value_buf[0] = '\0';
   usize buffer_index = 0;
 
   while (*format && buffer_index < bufsz) {
@@ -87,23 +90,29 @@ usize k_str_printf(char *restrict buffer, usize bufsz,
           buffer[buffer_index++] = (char)va_arg(args, int);
           break;
         case 's':  // string
-          buffer_index += k_str_append_str(buffer, bufsz, va_arg(args, char *));
+          buffer_index += k_str_append_str_at(
+              buffer, bufsz, va_arg(args, char *), buffer_index);
           break;
         case 'b':  // binary
           k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 2);
-          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          buffer_index +=
+              k_str_append_str_at(buffer, bufsz, value_buf, buffer_index);
           break;
         case 'o':  // octonary
           k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 8);
-          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          buffer_index +=
+              k_str_append_str_at(buffer, bufsz, value_buf, buffer_index);
           break;
         case 'd':  // decimal
           k_i32_to_str(value_buf, value_buf_size, va_arg(args, i32), 10);
-          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          // DEBUG_DUMP_PTR(value_buf, 32);
+          buffer_index +=
+              k_str_append_str_at(buffer, bufsz, value_buf, buffer_index);
           break;
         case 'x':  // hexadecimal
           k_i32_to_str(value_buf, value_buf_size, va_arg(args, u32), 16);
-          buffer_index += k_str_append_str(buffer, bufsz, value_buf);
+          buffer_index +=
+              k_str_append_str_at(buffer, bufsz, value_buf, buffer_index);
           break;
         case '%':  // %
           buffer[buffer_index++] = *format;

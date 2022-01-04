@@ -7,7 +7,7 @@
 
 // if there are many debug output place,
 // define the function and variable name here
-#define DEBUG_OUTPUT_TO_VGA
+#define DEBUG_OUTPUT_TO_COM1
 #ifdef DEBUG_OUTPUT_TO_VGA
 
 #include "vgastr.h"
@@ -26,9 +26,11 @@
 
 #define DEBUG_FUNCTION_WRITE_CHAR(c) io_out8(IO_COM1, c)
 #define DEBUG_FUNCTION_WRITE_STR(s) \
-  u8* _p = (u8*)s;                  \
-  for (; *_p; _p++) {               \
-    io_out8(IO_COM1, *_p);          \
+  {                                 \
+    u8* _p = (u8*)s;                \
+    for (; *_p; _p++) {             \
+      io_out8(IO_COM1, *_p);        \
+    }                               \
   }
 #define DEBUG_FUNCTION_WRITE_FORMAT(fmt, ...)    \
   {                                              \
