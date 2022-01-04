@@ -1,7 +1,7 @@
 #ifndef _KERNEL_DEBUG_H_
 #define _KERNEL_DEBUG_H_
 
-#include "libk.h"
+#include "libk/libk.h"
 
 #define DEBUG_UNUSED(x) (void)(x)
 

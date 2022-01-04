@@ -1,7 +1,7 @@
 #include "vgastr.h"
 
 #include "io.h"
-#include "libk.h"
+#include "libk/libk.h"
 
 volatile char *k_vgastr_offset_ptr = (char *)K_VGASTR_START;
 volatile u16 k_vgastr_offset_row = 0;

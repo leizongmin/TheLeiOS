@@ -1,7 +1,7 @@
 #ifndef _KERNEL_CPU_IDT_H_
 #define _KERNEL_CPU_IDT_H_
 
-#include "../libk.h"
+#include "libk/libk.h"
 
 // Address of kernel code segment
 #define KERNEL_CS 0x08

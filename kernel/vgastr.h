@@ -7,7 +7,7 @@
  * ASCII Table: https://www.asciitable.com/
  */
 
-#include "libk.h"
+#include "libk/libk.h"
 
 // Indexed registers for read\write from\in port
 #define K_VGASTR_REG_SCREEN_CTRL 0x3D4

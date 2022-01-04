@@ -1,7 +1,7 @@
 #ifndef _KERNEL_CPUID_H_
 #define _KERNEL_CPUID_H_
 
-#include "libk.h"
+#include "libk/libk.h"
 
 enum k_cpuid_requests {
   K_CPUID_GETVENDORSTRING,

@@ -1,7 +1,8 @@
 #ifndef _KERNEL_CPU_ISR_H_
 #define _KERNEL_CPU_ISR_H_
 
-#include "../libk.h"
+#include "libk/libk.h"
+
 // These functions are declared in interrupt.asm file
 extern void isr0();
 extern void isr1();

@@ -21,7 +21,8 @@ ASMBFLAGS 		?= -g -f elf -F dwarf
 CFLAGS 			?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
-				-Wno-unused-parameter -Wunused-variable -Werror
+				-Wno-unused-parameter -Wunused-variable -Werror \
+				-I$(CURDIR)
 LDFLAGS 		?= -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 		?= -O binary
 
@@ -35,7 +36,7 @@ else
 endif
 
 KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
-			$(KERNEL_TARGET_DIR)/libk.o \
+			$(KERNEL_TARGET_DIR)/libk/libk.o \
 			$(KERNEL_TARGET_DIR)/debug.o \
 			$(KERNEL_TARGET_DIR)/io.o \
 			$(KERNEL_TARGET_DIR)/vgastr.o \
@@ -62,6 +63,7 @@ clean:
 directories:
 	mkdir -p $(KERNEL_TARGET_DIR)
 	mkdir -p $(KERNEL_TARGET_DIR)/cpu
+	mkdir -p $(KERNEL_TARGET_DIR)/libk
 
 variables:
 	@printf "    BUILDTYPE          $(BUILDTYPE)\n"
