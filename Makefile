@@ -111,9 +111,9 @@ run-kernel: $(KERNEL_BIN_FILE)
 #? Press Alt + 3 switch to serial0 console
 #? Press Alt + 4 switch to parallel0 console
 run-iso2: $(ISO_FILE)
-	$(QEMU) $(QEMU_FLAGS) -curses -cdrom "$(ISO_FILE)"
+	$(QEMU) $(QEMU_FLAGS) -display curses -cdrom "$(ISO_FILE)"
 run-kernel2: $(KERNEL_BIN_FILE)
-	$(QEMU) $(QEMU_FLAGS) -curses -kernel "$(KERNEL_BIN_FILE)"
+	$(QEMU) $(QEMU_FLAGS) -display curses -kernel "$(KERNEL_BIN_FILE)"
 
 gdb:
 	$(GDB)
