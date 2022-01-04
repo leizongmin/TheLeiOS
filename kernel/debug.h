@@ -56,7 +56,7 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
                    const char* prefix, const char* s);
 
 #define DEBUG_MESSAGE_DEBUG_COLOR \
-  (K_VGASTR_COLOR_LIGHT_BROWN + K_VGASTR_BGCOLOR_CYAN)
+  (K_VGASTR_COLOR_BLACK + K_VGASTR_BGCOLOR_LIGHT_GREY)
 #define DEBUG_MESSAGE_DEBUG_PREFIX "DEBUG"
 
 #define DEBUG_MESSAGE_ERROR_COLOR \
