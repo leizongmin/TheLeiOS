@@ -23,8 +23,8 @@ i32 k_cpuid_str(i32 code, char buf[13]) {
 
   buf[12] = '\0';
 
-  DEBUG_PRINTF("k_cpuid_str eax=0x%x ebx=0x%x ecx=0x%x edx=0x%x str=%s", eax,
-               ebx, ecx, edx, buf);
+  K_DEBUG_PRINTF("k_cpuid_str eax=0x%x ebx=0x%x ecx=0x%x edx=0x%x str=%s", eax,
+                 ebx, ecx, edx, buf);
 
   return (i32)eax;
 }

@@ -10,10 +10,12 @@ ISO_FILE 		?= $(TARGET_DIR)/LeiOS.iso
 KERNEL_BIN_FILE 	?= $(TARGET_DIR)/kernel.bin
 KERNEL_ELF_FILE 	?= $(TARGET_DIR)/kernel.elf
 CONTAINER_NAME 		?= Build-LeiOS-$(shell date +%Y%m%d-%H%M%S)
+KERNEL_SRC_FILES 	:= $(shell find "$(KERNEL_DIR)" -type f -name '*.c' -or -name '*.h')
 
 GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
+CLANG_FORMAT 		?= clang-format
 override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset
 
 # debug mode
@@ -22,7 +24,7 @@ ifeq "$(DEBUG)" "1"
 	override QEMU_FLAGS += -s -S
 endif
 
-.PHONY: all init clean help kernel iso docker-image docker run run-iso run-iso2 run-kernel run-kernel2
+.PHONY: all init clean reformat help kernel iso docker-image docker run run-iso run-iso2 run-kernel run-kernel2
 
 all: clean kernel
 
@@ -35,13 +37,18 @@ init:
 		$(MAKE) docker-image BUILDTYPE=$(BUILDTYPE);\
 	fi
 
+reformat:
+	$(CLANG_FORMAT) -i --style=file $(KERNEL_SRC_FILES)
+
 help:
 	@printf "The LeiOS\n"
 	@printf "=========\n"
 	@printf "\n"
 	@printf "Usage:\n"
 	@printf "\n"
-	@printf "    init               Initiate the current build environment \n"
+	@printf "    init               Initiate the current build environment\n"
+	@printf "    clean              Clean build cache and temp files\n"
+	@printf "    reformat           Reformat all source files\n"
 	@printf "    kernel             Build the OS kernel\n"
 	@printf "    iso                Build the bootable iso file\n"
 	@printf "    docker-image       Make docker image of builder (for none Linux system)\n"
@@ -69,6 +76,8 @@ help:
 	@printf "    QEMU_FLAGS         $(QEMU_FLAGS)\n"
 	@printf "    DEBUG              $(DEBUG)\n"
 	@printf "    CONTAINER_NAME     $(CONTAINER_NAME)\n"
+	@printf "    KERNEL_SRC_FILES   $(KERNEL_SRC_FILES)\n"
+	@printf "    CLANG_FORMAT       $(CLANG_FORMAT)\n"
 	@printf "\n"
 	@printf "Variables for make kernel:\n"
 	@printf "\n"

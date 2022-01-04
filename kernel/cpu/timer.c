@@ -13,7 +13,7 @@ u32 tick = 0;
 // Triggers each time when hardware interrupt occurred
 static void timer_callback(registers_t regs) {
   tick++;
-  DEBUG_UNUSED(regs);
+  K_DEBUG_UNUSED(regs);
 }
 
 // Initialize PIC

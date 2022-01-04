@@ -121,8 +121,8 @@ void isr_install() {
 // Calls every time when some interrupt is occured
 // This function is available in interrupt.asm file via extern in asm
 void isr_handler(registers_t r) {
-  DEBUG_ERRORF("Received interrupt: %d\n%s\n", r.int_no,
-               exception_messages[r.int_no]);
+  K_DEBUG_ERRORF("Received interrupt: %d\n%s\n", r.int_no,
+                 exception_messages[r.int_no]);
 }
 
 void irq_install() {
