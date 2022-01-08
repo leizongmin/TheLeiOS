@@ -53,7 +53,6 @@ extern volatile u16 k_vgatext_offset_column;
 extern volatile u8 k_vgatext_color;
 
 void k_vgatext_fill(u8 color, char fill);
-static inline void k_vgatext_clear(u8 color) { k_vgatext_fill(color, 0); }
 void k_vgatext_next_row();
 static inline void k_vgatext_set_color(u8 color) { k_vgatext_color = color; }
 void k_vgatext_write(char c);
@@ -64,5 +63,12 @@ void k_vgatext_backspace();
 u16 k_vgatext_cursor_get(u16 *x, u16 *y);
 void k_vgatext_cursor_set(u16 x, u16 y);
 void k_vgatext_cursor_refresh();
+
+static inline void k_vgatext_clear(u8 color) {
+  k_vgatext_fill(color, 0);
+  k_vgatext_offset_row = 0;
+  k_vgatext_offset_column = 0;
+  k_vgatext_cursor_refresh();
+}
 
 #endif  // _KERNEL_DRIVERS_VGATEXT_H

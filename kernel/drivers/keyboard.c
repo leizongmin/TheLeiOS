@@ -38,7 +38,6 @@ static void keyboard_callback(registers_t regs) {
   if (scancode == BACKSPACE) {
     k_str_backspace(key_buffer);
     k_vgatext_backspace();
-    k_vgatext_write('>');
   } else if (scancode == ENTER) {
     k_vgatext_write_str("\n");
     user_input(key_buffer);

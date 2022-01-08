@@ -159,6 +159,7 @@ void k_vgatext_backspace() {
     k_vgatext_offset_column = K_VGATEXT_COLUMNS - 1;
     if (k_vgatext_offset_row == 0) {
       k_vgatext_clear(k_vgatext_color);
+      return;
     } else {
       k_vgatext_offset_row--;
     }
@@ -166,9 +167,8 @@ void k_vgatext_backspace() {
     k_vgatext_offset_column--;
   }
 
-  *k_vgatext_offset_ptr = (char)k_vgatext_color;
-  k_vgatext_offset_ptr--;
+  k_vgatext_offset_ptr -= 2;
   *k_vgatext_offset_ptr = ' ';
-  k_vgatext_offset_ptr--;
+  *(k_vgatext_offset_ptr + 1) = (char)k_vgatext_color;
   k_vgatext_cursor_refresh();
 }
