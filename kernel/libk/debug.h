@@ -12,18 +12,18 @@
 
 #include "vgastr.h"
 
-#define K_DEBUG_FUNCTION_WRITE_CHAR(c) k_vgastr_write(c)
-#define K_DEBUG_FUNCTION_WRITE_STR(s) k_vgastr_write_str(s)
+#define K_DEBUG_FUNCTION_WRITE_CHAR(c) k_vgatext_write(c)
+#define K_DEBUG_FUNCTION_WRITE_STR(s) k_vgatext_write_str(s)
 #define K_DEBUG_FUNCTION_WRITE_FORMAT(fmt, ...) \
-  k_vgastr_printf(fmt, __VA_ARGS__)
-#define K_DEBUG_FUNCTION_COLOR k_vgastr_color
-#define K_DEBUG_FUNCTION_COLOR_SET(c) k_vgastr_set_color(c)
-#define K_DEBUG_FUNCTION_OFFSET_COLUMN k_vgastr_offset_column
+  k_vgatext_printf(fmt, __VA_ARGS__)
+#define K_DEBUG_FUNCTION_COLOR k_vgatext_color
+#define K_DEBUG_FUNCTION_COLOR_SET(c) k_vgatext_set_color(c)
+#define K_DEBUG_FUNCTION_OFFSET_COLUMN k_vgatext_offset_column
 
 #else
 
+#include "drivers/vgatext.h"
 #include "io.h"
-#include "vgastr.h"
 
 #define K_DEBUG_FUNCTION_WRITE_CHAR(c) io_out8(IO_COM1, c)
 #define K_DEBUG_FUNCTION_WRITE_STR(s) \
@@ -59,11 +59,11 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
                    const char* prefix, const char* s);
 
 #define K_DEBUG_MESSAGE_K_DEBUG_COLOR \
-  (K_VGASTR_COLOR_BLACK + K_VGASTR_BGCOLOR_LIGHT_GREY)
+  (K_VGATEXT_COLOR_BLACK + K_VGATEXT_BGCOLOR_LIGHT_GREY)
 #define K_DEBUG_MESSAGE_K_DEBUG_PREFIX "DEBUG"
 
 #define K_DEBUG_MESSAGE_ERROR_COLOR \
-  (K_VGASTR_COLOR_LIGHT_RED + K_VGASTR_BGCOLOR_DARK_GREY)
+  (K_VGATEXT_COLOR_LIGHT_RED + K_VGATEXT_BGCOLOR_DARK_GREY)
 #define K_DEBUG_MESSAGE_ERROR_PREFIX "ERROR"
 
 #define K_DEBUG_KEEP_CURRENT_OUTPUT_STATUS(c, x) \

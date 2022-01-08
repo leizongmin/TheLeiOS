@@ -2,8 +2,8 @@
 
 #include "cpu/isr.h"
 #include "cpu/ports.h"
+#include "drivers/vgatext.h"
 #include "libk/debug.h"
-#include "vgastr.h"
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
@@ -37,17 +37,17 @@ static void keyboard_callback(registers_t regs) {
   if (scancode > SC_MAX) return;
   if (scancode == BACKSPACE) {
     k_str_backspace(key_buffer);
-    k_vgastr_backspace();
-    k_vgastr_write('>');
+    k_vgatext_backspace();
+    k_vgatext_write('>');
   } else if (scancode == ENTER) {
-    k_vgastr_write_str("\n");
+    k_vgatext_write_str("\n");
     user_input(key_buffer);
     key_buffer[0] = '\0';
   } else {
     char letter = sc_ascii[(int)scancode];
     char str[2] = {letter, '\0'};
     k_str_append(key_buffer, letter);
-    k_vgastr_write_str(str);
+    k_vgatext_write_str(str);
   }
 
   K_DEBUG_UNUSED(regs);

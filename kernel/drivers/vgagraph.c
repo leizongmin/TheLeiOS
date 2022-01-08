@@ -1,4 +1,4 @@
-#include "vga.h"
+#include "drivers/vgagraph.h"
 
 /**
  * https://wiki.osdev.org/VGA_Hardware
