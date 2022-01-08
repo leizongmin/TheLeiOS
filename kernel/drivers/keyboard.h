@@ -1,5 +1,5 @@
-#ifndef _KERNEL_KEYBOARD_H_
-#define _KERNEL_KEYBOARD_H_
+#ifndef _KERNEL_DRIVERS_KEYBOARD_H
+#define _KERNEL_DRIVERS_KEYBOARD_H
 
 #define KB_ESC 0x1B
 #define KB_ENTER 0x0A
@@ -92,7 +92,7 @@
 #define KB_ALT_INSERT (0X100 | 162)
 #define KB_ALT_DELETE (0X100 | 163)
 
-// FIXME
-static void init_keyboard() {}
+void init_keyboard();
+void user_input(char *input);
 
-#endif  //_KERNEL_KEYBOARD_H_
+#endif  //_KERNEL_DRIVERS_KEYBOARD_H

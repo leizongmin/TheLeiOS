@@ -153,3 +153,22 @@ void k_vgastr_printf(const char *fmt, ...) {
   }
   va_end(args);
 }
+
+void k_vgastr_backspace() {
+  if (k_vgastr_offset_column == 0) {
+    k_vgastr_offset_column = K_VGASTR_COLUMNS - 1;
+    if (k_vgastr_offset_row == 0) {
+      k_vgastr_clear(k_vgastr_color);
+    } else {
+      k_vgastr_offset_row--;
+    }
+  } else {
+    k_vgastr_offset_column--;
+  }
+
+  *k_vgastr_offset_ptr = (char)k_vgastr_color;
+  k_vgastr_offset_ptr--;
+  *k_vgastr_offset_ptr = ' ';
+  k_vgastr_offset_ptr--;
+  k_vgastr_cursor_refresh();
+}

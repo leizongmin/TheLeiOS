@@ -47,6 +47,7 @@ KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 				$(KERNEL_TARGET_DIR)/cpu/ports.o \
 				$(KERNEL_TARGET_DIR)/cpu/timer.o \
 				$(KERNEL_TARGET_DIR)/cpu/interrupt.o \
+			$(KERNEL_TARGET_DIR)/drivers/keyboard.o \
 			$(KERNEL_TARGET_DIR)/main.o
 
 KERNEL_ELF 	?= $(KERNEL_TARGET_DIR)/kernel.elf
@@ -64,6 +65,7 @@ directories:
 	mkdir -p $(KERNEL_TARGET_DIR)
 	mkdir -p $(KERNEL_TARGET_DIR)/cpu
 	mkdir -p $(KERNEL_TARGET_DIR)/libk
+	mkdir -p $(KERNEL_TARGET_DIR)/drivers
 
 variables:
 	@printf "    BUILDTYPE          $(BUILDTYPE)\n"
