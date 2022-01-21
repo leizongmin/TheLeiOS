@@ -28,7 +28,7 @@ void k_vgatext_next_row() {
   // if hit the bottom, scroll one line
   if (k_vgatext_offset_row >= K_VGATEXT_ROWS) {
     k_mem_copy((void *)K_VGATEXT_START,
-               (void *)K_VGATEXT_START + K_VGATEXT_OFFSET_PER_ROW,
+               (u8 *)K_VGATEXT_START + K_VGATEXT_OFFSET_PER_ROW,
                K_VGATEXT_LAST_ROW_START - K_VGATEXT_START);
     k_mem_set((void *)(K_VGATEXT_LAST_ROW_START), 0, K_VGATEXT_OFFSET_PER_ROW);
     k_vgatext_offset_row--;

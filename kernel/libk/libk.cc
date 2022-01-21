@@ -2,9 +2,10 @@
 
 #include "libk/debug.h"
 
-void *k_mem_copy(void *restrict dest, const void *restrict src, usize count) {
-  u8 *d = dest;
-  const u8 *s = src;
+void *k_mem_copy(void *__restrict__ dest, const void *__restrict__ src,
+                 usize count) {
+  u8 *d = static_cast<u8 *>(dest);
+  const u8 *s = static_cast<const u8 *>(src);
   while (count--) {
     *d++ = *s++;
   }
@@ -12,14 +13,14 @@ void *k_mem_copy(void *restrict dest, const void *restrict src, usize count) {
 }
 
 void *k_mem_set(void *dest, u8 ch, usize count) {
-  u8 *d = dest;
+  u8 *d = static_cast<u8 *>(dest);
   while (count--) {
     *d++ = ch;
   }
   return dest;
 }
 
-int k_str_cmp(const char *restrict s1, const char *restrict s2) {
+int k_str_cmp(const char *__restrict__ s1, const char *__restrict__ s2) {
   const char *l = s1, *r = s2;
   while (*l && (*l == *r)) {
     l++;
@@ -55,13 +56,14 @@ void k_str_backspace(char *s) {
   s[len - 1] = '\0';
 }
 
-usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2) {
+usize k_str_append_str(char *__restrict__ s, usize sz,
+                       const char *__restrict__ s2) {
   usize len = k_str_len(s);
   return k_str_append_str_at(s, sz, s2, len);
 }
 
-usize k_str_append_str_at(char *restrict s, usize sz, const char *restrict s2,
-                          usize offset) {
+usize k_str_append_str_at(char *__restrict__ s, usize sz,
+                          const char *__restrict__ s2, usize offset) {
   usize i = offset;
   for (; i < sz && *s2; i++) {
     *(s + i) = *s2++;
@@ -74,8 +76,8 @@ usize k_str_append_str_at(char *restrict s, usize sz, const char *restrict s2,
   return i - offset;
 }
 
-usize k_str_printf(char *restrict buffer, usize bufsz,
-                   const char *restrict format, ...) {
+usize k_str_printf(char *__restrict__ buffer, usize bufsz,
+                   const char *__restrict__ format, ...) {
   va_list args;
   va_start(args, format);
 

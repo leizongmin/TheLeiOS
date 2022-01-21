@@ -6,6 +6,10 @@
 #include "libk/libk.h"
 #include "os.h"
 
+extern "C" {
+void k_main();
+}
+
 idt_gate_t idt[IDT_ENTRIES];
 idt_register_t idt_reg;
 

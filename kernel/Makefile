@@ -6,19 +6,26 @@ KERNEL_TARGET_DIR 	?= $(CURDIR)/target
 
 ASM			?= nasm
 CC			?= gcc
+CXX 			?= g++
 LD			?= ld
 OBJCOPY			?= objcopy
 OBJDUMP			?= objdump
 # use x86_64-elf-gcc on macOS
 ifeq "$(UNAME_S)" "Darwin"
 	override CC 		:= $(CROSS_PREFIX)-gcc
+	override CXX 		:= $(CROSS_PREFIX)-g++
 	override LD 		:= $(CROSS_PREFIX)-ld
 	override OBJCOPY 	:= $(CROSS_PREFIX)-objcopy
 	override OBJDUMP 	:= $(CROSS_PREFIX)-objdump
 endif
 
-ASMBFLAGS 		?= -g -f elf -F dwarf
+ASFLAGS 		?= -g -f elf -F dwarf
 CFLAGS 			?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
+				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
+				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
+				-Wno-unused-parameter -Wunused-variable -Werror \
+				-I$(CURDIR)
+CXXFLAGS 		?= -g -c -std=c++17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
@@ -76,8 +83,9 @@ variables:
 	@printf "    LD                 $(LD)\n"
 	@printf "    OBJCOPY            $(OBJCOPY)\n"
 	@printf "    OBJDUMP            $(OBJDUMP)\n"
-	@printf "    ASMBFLAGS          $(ASMBFLAGS)\n"
+	@printf "    ASFLAGS            $(ASFLAGS)\n"
 	@printf "    CFLAGS             $(CFLAGS)\n"
+	@printf "    CXXFLAGS           $(CXXFLAGS)\n"
 	@printf "    LDFLAGS            $(LDFLAGS)\n"
 	@printf "    OJCYFLAGS          $(OJCYFLAGS)\n"
 	@printf "    KERNEL_OBJS        $(KERNEL_OBJS)\n"
@@ -96,6 +104,8 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OJCYFLAGS) $< $@
 
 $(KERNEL_TARGET_DIR)/%.o : %.asm
-	$(ASM) $(ASMBFLAGS) -o $@ $<
+	$(ASM) $(ASFLAGS) -o $@ $<
 $(KERNEL_TARGET_DIR)/%.o : %.c
 	$(CC) $(CFLAGS) -o $@ $<
+$(KERNEL_TARGET_DIR)/%.o : %.cc
+	$(CXX) $(CXXFLAGS) -o $@ $<

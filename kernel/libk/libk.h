@@ -30,19 +30,21 @@
 #define LOW_64(address) (uint64_t)((address)&0xFFFFFFFFFFFFFFFF)
 #define HIGH_64(address) (uint64_t)(((address) >> 64) & 0xFFFFFFFFFFFFFFFF)
 
-void *k_mem_copy(void *restrict dest, const void *restrict src, usize count);
+void *k_mem_copy(void *__restrict__ dest, const void *__restrict__ src,
+                 usize count);
 void *k_mem_set(void *dest, u8 ch, usize count);
 
-int k_str_cmp(const char *restrict s1, const char *restrict s2);
+int k_str_cmp(const char *__restrict__ s1, const char *__restrict__ s2);
 void k_str_reverse(char *s);
 usize k_str_len(const char *s);
 void k_str_append(char *s, char n);
-usize k_str_append_str(char *restrict s, usize sz, const char *restrict s2);
-usize k_str_append_str_at(char *restrict s, usize sz, const char *restrict s2,
-                          usize offset);
+usize k_str_append_str(char *__restrict__ s, usize sz,
+                       const char *__restrict__ s2);
+usize k_str_append_str_at(char *__restrict__ s, usize sz,
+                          const char *__restrict__ s2, usize offset);
 void k_str_backspace(char *s);
-usize k_str_printf(char *restrict buffer, usize bufsz,
-                   const char *restrict format, ...);
+usize k_str_printf(char *__restrict__ buffer, usize bufsz,
+                   const char *__restrict__ format, ...);
 usize k_i32_to_str(char *buf, usize buf_size, i32 num, i32 radix);
 
 #endif  //_KERNEL_LIBK_H_

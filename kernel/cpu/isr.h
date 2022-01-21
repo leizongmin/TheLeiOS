@@ -3,6 +3,8 @@
 
 #include "libk/libk.h"
 
+extern "C" {
+
 // These functions are declared in interrupt.asm file
 extern void isr0();
 extern void isr1();
@@ -88,5 +90,5 @@ void isr_handler(registers_t r);
 void irq_install();
 void irq_handler(registers_t r);
 void register_interrupt_handler(u8 n, isr_t handler);
-
+}
 #endif  //_KERNEL_CPU_ISR_H_
