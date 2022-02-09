@@ -94,7 +94,7 @@ iso: kernel
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
 	cp grub.cfg "$(TARGET_DIR)/isofiles/boot/grub/grub.cfg"
 	cp "$(KERNEL_BIN_FILE)" "$(TARGET_DIR)/isofiles/boot/kernel.bin"
-	grub-mkrescue -o "$(ISO_FILE)" "$(TARGET_DIR)/isofiles"
+	grub-mkrescue -v -o "$(ISO_FILE)" "$(TARGET_DIR)/isofiles"
 
 docker-image:
 	$(DOCKER) build -t $(DOCKER_IMAGE) -f builder_Dockerfile $(CURDIR)
