@@ -47,11 +47,11 @@ KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 				$(KERNEL_TARGET_DIR)/libk/debug.o \
 			$(KERNEL_TARGET_DIR)/io.o \
 			$(KERNEL_TARGET_DIR)/cpuid.o \
-			$(KERNEL_TARGET_DIR)/cpu/idt.o \
-				$(KERNEL_TARGET_DIR)/cpu/isr.o \
-				$(KERNEL_TARGET_DIR)/cpu/ports.o \
-				$(KERNEL_TARGET_DIR)/cpu/timer.o \
-				$(KERNEL_TARGET_DIR)/cpu/interrupt.o \
+			$(KERNEL_TARGET_DIR)/arch/i386/idt.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/isr.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/ports.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/timer.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/interrupt.o \
 			$(KERNEL_TARGET_DIR)/drivers/keyboard.o \
 				$(KERNEL_TARGET_DIR)/drivers/vgatext.o \
 				$(KERNEL_TARGET_DIR)/drivers/vgagraph.o \
@@ -70,7 +70,7 @@ clean:
 
 directories:
 	mkdir -p $(KERNEL_TARGET_DIR)
-	mkdir -p $(KERNEL_TARGET_DIR)/cpu
+	mkdir -p $(KERNEL_TARGET_DIR)/arch/i386
 	mkdir -p $(KERNEL_TARGET_DIR)/libk
 	mkdir -p $(KERNEL_TARGET_DIR)/drivers
 

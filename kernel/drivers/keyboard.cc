@@ -1,7 +1,7 @@
 #include "drivers/keyboard.h"
 
-#include "cpu/isr.h"
-#include "cpu/ports.h"
+#include "arch/i386/isr.h"
+#include "arch/i386/ports.h"
 #include "drivers/vgatext.h"
 #include "libk/debug.h"
 
