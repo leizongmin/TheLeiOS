@@ -1,5 +1,5 @@
-#ifndef _KERNEL_CPU_ISR_H_
-#define _KERNEL_CPU_ISR_H_
+#ifndef _KERNEL_ARCH_I386_CPU_ISR_H_
+#define _KERNEL_ARCH_I386_CPU_ISR_H_
 
 #include "libk/libk.h"
 
@@ -91,4 +91,4 @@ void irq_install();
 void irq_handler(registers_t r);
 void register_interrupt_handler(u8 n, isr_t handler);
 }
-#endif  //_KERNEL_CPU_ISR_H_
+#endif  //_KERNEL_ARCH_I386_CPU_ISR_H_

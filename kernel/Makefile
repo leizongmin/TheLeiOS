@@ -45,9 +45,9 @@ endif
 KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 			$(KERNEL_TARGET_DIR)/libk/libk.o \
 				$(KERNEL_TARGET_DIR)/libk/debug.o \
-			$(KERNEL_TARGET_DIR)/io.o \
-			$(KERNEL_TARGET_DIR)/cpuid.o \
-			$(KERNEL_TARGET_DIR)/arch/i386/idt.o \
+			$(KERNEL_TARGET_DIR)/arch/i386/io.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/cpuid.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/idt.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/isr.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/ports.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/timer.o \

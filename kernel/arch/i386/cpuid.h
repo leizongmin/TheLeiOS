@@ -1,5 +1,5 @@
-#ifndef _KERNEL_CPUID_H_
-#define _KERNEL_CPUID_H_
+#ifndef _KERNEL_ARCH_I386_CPUID_H_
+#define _KERNEL_ARCH_I386_CPUID_H_
 
 #include "libk/libk.h"
 
@@ -18,4 +18,4 @@ enum k_cpuid_requests {
 
 i32 k_cpuid_str(i32 code, char buf[13]);
 
-#endif  //_KERNEL_CPUID_H_
+#endif  //_KERNEL_ARCH_I386_CPUID_H_

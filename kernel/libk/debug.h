@@ -22,8 +22,8 @@
 
 #else
 
+#include "arch/i386/io.h"
 #include "drivers/vgatext.h"
-#include "io.h"
 
 #define K_DEBUG_FUNCTION_WRITE_CHAR(c) io_out8(IO_COM1, c)
 #define K_DEBUG_FUNCTION_WRITE_STR(s) \

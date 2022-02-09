@@ -1,5 +1,5 @@
-#ifndef _KERNEL_IO_H_
-#define _KERNEL_IO_H_
+#ifndef _KERNEL_ARCH_I386_IO_H_
+#define _KERNEL_ARCH_I386_IO_H_
 
 #include "libk/libk.h"
 
@@ -317,4 +317,4 @@ arguments:
 //   io_out8(port, value);
 // }
 
-#endif  //_KERNEL_IO_H_
+#endif  //_KERNEL_ARCH_I386_IO_H_

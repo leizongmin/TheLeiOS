@@ -1,5 +1,5 @@
-#ifndef _KERNEL_CPU_IDT_H_
-#define _KERNEL_CPU_IDT_H_
+#ifndef _KERNEL_ARCH_I386_CPU_IDT_H_
+#define _KERNEL_ARCH_I386_CPU_IDT_H_
 
 #include "libk/libk.h"
 
@@ -43,4 +43,4 @@ extern idt_register_t idt_reg;
 void set_idt_gate(int n, u32 handler);
 void set_idt();
 
-#endif  //_KERNEL_CPU_IDT_H_
+#endif  //_KERNEL_ARCH_I386_CPU_IDT_H_

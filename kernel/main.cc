@@ -1,6 +1,6 @@
 #include "arch/i386/idt.h"
 #include "arch/i386/isr.h"
-#include "cpuid.h"
+#include "arch/i386/cpuid.h"
 #include "drivers/vgatext.h"
 #include "libk/debug.h"
 #include "libk/libk.h"
