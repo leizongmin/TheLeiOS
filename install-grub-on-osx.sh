@@ -6,6 +6,9 @@ cd tools/objconv
 cp objconv /usr/local/bin/objconv
 cd ../..
 
+echo "Installing dependencies"
+brew install xorriso mtools
+
 echo "Installing grub"
 echo ""
 git clone --depth 1 git://git.savannah.gnu.org/grub.git
@@ -14,3 +17,5 @@ cd grub
 ./configure
 make
 make install
+cd ..
+cp tools/fonts/unicode.pf2 /usr/local/share/grub/unicode.pf2
