@@ -16,7 +16,8 @@ GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
 CLANG_FORMAT 		?= clang-format
-override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset
+override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset \
+				-nodefaults -drive file=fat:rw:fat-type=32:$(TARGET_DIR)/rootfs,id=rootfs,format=raw,if=none
 
 # debug mode
 ifeq "$(DEBUG)" "1"
@@ -89,6 +90,7 @@ kernel:
 	mkdir -p $(TARGET_DIR)
 	cp "$(KERNEL_TARGET_DIR)/kernel.elf" "$(KERNEL_ELF_FILE)"
 	cp "$(KERNEL_TARGET_DIR)/kernel.bin" "$(KERNEL_BIN_FILE)"
+	mkdir -p "$(TARGET_DIR)/rootfs"
 
 iso: kernel
 	mkdir -p "$(TARGET_DIR)/isofiles/boot/grub"
