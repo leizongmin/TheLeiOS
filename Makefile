@@ -127,4 +127,4 @@ run-kernel2: $(KERNEL_BIN_FILE)
 	$(QEMU) $(QEMU_FLAGS) -display curses -kernel "$(KERNEL_BIN_FILE)"
 
 gdb:
-	$(GDB)
+	$(GDB) -tui

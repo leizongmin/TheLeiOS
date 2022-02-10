@@ -20,12 +20,12 @@ ifeq "$(UNAME_S)" "Darwin"
 endif
 
 ASFLAGS 		?= -g -f elf -F dwarf
-CFLAGS 			?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
+CFLAGS 			?= -g -c -std=c17 -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
 				-I$(CURDIR)/..
-CXXFLAGS 		?= -g -c -std=c++17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
+CXXFLAGS 		?= -g -c -std=c++17 -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
@@ -38,8 +38,10 @@ ifeq "$(BUILDTYPE)" "Release"
 	override LDFLAGS += -s
 	override OJCYFLAGS += -S
 	override CFLAGS += -Os -DNDEBUG
+	override CXXFLAGS += -Os -DNDEBUG
 else
-	override CFLAGS += -O0
+	override CFLAGS += -O0 -DDEBUG
+	override CXXFLAGS += -O0 -DDEBUG
 endif
 
 KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
