@@ -16,7 +16,7 @@ GDB 			?= gdb
 DOCKER 			?= docker
 QEMU 			?= qemu-system-x86_64
 CLANG_FORMAT 		?= clang-format
-override QEMU_FLAGS 	+= -smp 2 -m 16M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset \
+override QEMU_FLAGS 	+= -smp 2 -m 128M -vga std -no-reboot -D $(TARGET_DIR)/qemu.log -serial file:$(TARGET_DIR)/serial.log -no-shutdown -d int,cpu_reset \
 				-nodefaults -drive file=fat:rw:fat-type=32:$(TARGET_DIR)/rootfs,id=rootfs,format=raw,if=none
 
 # debug mode

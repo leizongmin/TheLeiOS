@@ -1,9 +1,7 @@
-#include "arch/i386/idt.h"
-#include "arch/i386/isr.h"
-#include "arch/i386/cpuid.h"
-#include "drivers/vgatext.h"
-#include "libk/debug.h"
-#include "libk/libk.h"
+#include <kernel/arch/i386/all.h>
+#include <kernel/drivers/all.h>
+#include <kernel/libk/all.h>
+
 #include "os.h"
 
 extern "C" {
@@ -31,6 +29,10 @@ void welcome() {
     k_cpuid_str(K_CPUID_GETVENDORSTRING, id);
     k_vgatext_printf("detect cpuid: %s\n", id);
     K_DEBUG_DUMP_PTR(id, 12);
+  }
+  {
+    auto memory_size = kernel::arch::detectMemorySize();
+    k_vgatext_printf("detect memory size: %d\n", memory_size);
   }
 }
 

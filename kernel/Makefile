@@ -54,6 +54,7 @@ KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/port.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/timer.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/interrupt.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/memory.o \
 			$(KERNEL_TARGET_DIR)/drivers/keyboard.o \
 				$(KERNEL_TARGET_DIR)/drivers/vgatext.o \
 				$(KERNEL_TARGET_DIR)/drivers/vgagraph.o \

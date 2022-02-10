@@ -5,6 +5,7 @@
 #include "idt.h"
 #include "io.h"
 #include "isr.h"
+#include "memory.h"
 #include "port.h"
 #include "timer.h"
 
