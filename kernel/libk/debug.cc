@@ -1,6 +1,6 @@
-#include "libk/debug.h"
+#include "debug.h"
 
-#include "libk/libk.h"
+#include "libk.h"
 
 void k_debug_assert(const char* _func, const char* _file, usize _line,
                     const char* msg, bool condition) {

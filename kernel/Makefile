@@ -24,12 +24,12 @@ CFLAGS 			?= -g -c -std=c17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
-				-I$(CURDIR)
+				-I$(CURDIR)/..
 CXXFLAGS 		?= -g -c -std=c++17 -ggdb -nostdlib -fno-builtin -static -m32 -Wall \
 				-Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
-				-I$(CURDIR)
+				-I$(CURDIR)/..
 LDFLAGS 		?= -static -T kernel.lds -n -Map kernel.map
 OJCYFLAGS 		?= -O binary
 
@@ -49,7 +49,7 @@ KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/cpuid.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/idt.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/isr.o \
-				$(KERNEL_TARGET_DIR)/arch/i386/ports.o \
+				$(KERNEL_TARGET_DIR)/arch/i386/port.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/timer.o \
 				$(KERNEL_TARGET_DIR)/arch/i386/interrupt.o \
 			$(KERNEL_TARGET_DIR)/drivers/keyboard.o \

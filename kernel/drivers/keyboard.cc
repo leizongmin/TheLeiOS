@@ -1,9 +1,9 @@
-#include "drivers/keyboard.h"
+#include "keyboard.h"
 
-#include "arch/i386/isr.h"
-#include "arch/i386/ports.h"
-#include "drivers/vgatext.h"
-#include "libk/debug.h"
+#include <kernel/arch/i386/all.h>
+#include <kernel/libk/all.h>
+
+#include "vgatext.h"
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C

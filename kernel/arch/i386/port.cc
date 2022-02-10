@@ -1,6 +1,6 @@
 // Low level port I/O functions
 // These functions are used by most hardware drivers in our kernel
-#include "ports.h"
+#include "port.h"
 
 // Read a byte from the specified port
 u8 port_byte_in(u16 port) {

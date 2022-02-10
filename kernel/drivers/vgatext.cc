@@ -1,7 +1,7 @@
-#include "drivers/vgatext.h"
+#include "vgatext.h"
 
-#include "arch/i386/io.h"
-#include "libk/libk.h"
+#include <kernel/arch/i386/all.h>
+#include <kernel/libk/all.h>
 
 volatile char *k_vgatext_offset_ptr = (char *)K_VGATEXT_START;
 volatile u16 k_vgatext_offset_row = 0;

@@ -3,9 +3,10 @@
 
 #include "timer.h"
 
+#include <kernel/libk/all.h>
+
 #include "isr.h"
-#include "libk/debug.h"
-#include "ports.h"
+#include "port.h"
 
 u32 tick = 0;
 

@@ -1,7 +1,7 @@
-#ifndef _KERNEL_K_DEBUG_H_
-#define _KERNEL_K_DEBUG_H_
+#ifndef _KERNEL_LIBK_DEBUG_H_
+#define _KERNEL_LIBK_DEBUG_H_
 
-#include "libk/libk.h"
+#include "libk.h"
 
 #define K_DEBUG_UNUSED(x) (void)(x)
 
@@ -22,8 +22,8 @@
 
 #else
 
-#include "arch/i386/io.h"
-#include "drivers/vgatext.h"
+#include <kernel/arch/i386/all.h>
+#include <kernel/drivers/all.h>
 
 #define K_DEBUG_FUNCTION_WRITE_CHAR(c) io_out8(IO_COM1, c)
 #define K_DEBUG_FUNCTION_WRITE_STR(s) \
@@ -119,4 +119,4 @@ void k_debug_error(const char* _func, const char* _file, usize _line,
                                   __FILE__, __LINE__);                      \
   })
 
-#endif  //_KERNEL_K_DEBUG_H_
+#endif  //_KERNEL_LIBK_DEBUG_H_

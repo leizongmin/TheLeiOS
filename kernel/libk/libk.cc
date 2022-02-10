@@ -1,6 +1,5 @@
-#include "libk/libk.h"
+#include "libk.h"
 
-#include "libk/debug.h"
 
 void *k_mem_copy(void *__restrict__ dest, const void *__restrict__ src,
                  usize count) {

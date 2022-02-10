@@ -1,7 +1,7 @@
 #ifndef _KERNEL_ARCH_I386_IO_H_
 #define _KERNEL_ARCH_I386_IO_H_
 
-#include "libk/libk.h"
+#include <kernel/libk/all.h>
 
 #define IO_COM1 0x3F8
 #define IO_COM2 0x2F8

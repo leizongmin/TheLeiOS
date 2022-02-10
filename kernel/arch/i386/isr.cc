@@ -3,10 +3,11 @@
 
 #include "isr.h"
 
-#include "drivers/keyboard.h"
+#include <kernel/drivers/all.h>
+#include <kernel/libk/all.h>
+
 #include "idt.h"
-#include "libk/debug.h"
-#include "ports.h"
+#include "port.h"
 #include "timer.h"
 
 isr_t interrupt_handlers[256];

@@ -1,7 +1,7 @@
 #ifndef _KERNEL_ARCH_I386_CPU_ISR_H_
 #define _KERNEL_ARCH_I386_CPU_ISR_H_
 
-#include "libk/libk.h"
+#include <kernel/libk/all.h>
 
 extern "C" {
 

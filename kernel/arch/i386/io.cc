@@ -1,3 +1,3 @@
 #include "io.h"
 
-#include "libk/libk.h"
+#include <kernel/libk/all.h>
