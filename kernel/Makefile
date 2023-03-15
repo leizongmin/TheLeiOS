@@ -30,7 +30,7 @@ CXXFLAGS 		?= -g -c -std=c++17 -nostdlib -fno-builtin -static -m32 -Wall \
 				-fomit-frame-pointer -fno-builtin -fno-common  -ffreestanding \
 				-Wno-unused-parameter -Wunused-variable -Werror \
 				-I$(CURDIR)/..
-LDFLAGS 		?= -static -T kernel.lds -n -Map kernel.map
+LDFLAGS 		?= -static -T arch/i386/kernel.lds -n -Map arch/i386/kernel.map
 OJCYFLAGS 		?= -O binary
 
 # strip debug symbols
@@ -44,7 +44,7 @@ else
 	override CXXFLAGS += -O0 -DDEBUG
 endif
 
-KERNEL_OBJS 	:= $(KERNEL_TARGET_DIR)/boot.o \
+KERNEL_OBJS 	:=	$(KERNEL_TARGET_DIR)/arch/i386/boot.o \
 			$(KERNEL_TARGET_DIR)/libk/libk.o \
 				$(KERNEL_TARGET_DIR)/libk/debug.o \
 			$(KERNEL_TARGET_DIR)/arch/i386/io.o \
@@ -68,8 +68,17 @@ KERNEL_BIN 	?= $(KERNEL_TARGET_DIR)/kernel.bin
 all: clean directories build link bin
 
 clean:
-	rm -f *.o *.bin *.elf *.map
-	mkdir -p "$(KERNEL_TARGET_DIR)" && cd "$(KERNEL_TARGET_DIR)" && rm -f *.o *.bin *.elf *.map
+	find . -name "*.o" -type f -delete
+	find . -name "*.bin" -type f -delete
+	find . -name "*.elf" -type f -delete
+	find . -name "*.map" -type f -delete
+	find . -type d -empty -delete
+	mkdir -p "$(KERNEL_TARGET_DIR)"
+	find "$(KERNEL_TARGET_DIR)" -name "*.o" -type f -delete
+	find "$(KERNEL_TARGET_DIR)" -name "*.bin" -type f -delete
+	find "$(KERNEL_TARGET_DIR)" -name "*.elf" -type f -delete
+	find "$(KERNEL_TARGET_DIR)" -name "*.map" -type f -delete
+	find "$(KERNEL_TARGET_DIR)" -type d -empty -delete
 
 directories:
 	mkdir -p $(KERNEL_TARGET_DIR)
